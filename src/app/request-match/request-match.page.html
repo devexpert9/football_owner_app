@@ -1,0 +1,116 @@
+<app-header [title]="title"></app-header>
+
+<ion-content bg-dark padding>
+	<div addProperty>
+      <form [formGroup]="addmatch" (ngSubmit)="addmatchnow()">
+		<ion-list UserDetails>
+	   <ion-item no-padding>
+			  <ion-icon icon-left slot="start" name="business"></ion-icon>
+	 		  <ion-label position="stacked">Match Name</ion-label>
+           <ion-input  formControlName="name"></ion-input>         
+        </ion-item>
+        <div *ngIf="!addmatch.controls.name.valid && is_submit" class="valid">
+            Please enter name
+        </div>
+
+        <ion-item no-padding>
+          <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+          <ion-label position="stacked">Team1</ion-label>
+             <ion-input  formControlName="team1"></ion-input>    
+        </ion-item>
+  
+        <div *ngIf="!addmatch.controls.team1.valid && is_submit" class="valid">
+            Please enter team1 name
+        </div>
+  
+        <ion-item no-padding>
+          <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+          <ion-label position="stacked">Team2</ion-label>
+             <ion-input  formControlName="team2"></ion-input>    
+        </ion-item>
+  
+        <div *ngIf="!addmatch.controls.team2.valid && is_submit" class="valid">
+            Please enter Team2 name
+        </div>
+
+        
+		 <ion-item no-padding>
+			  <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+	 		 <ion-label position="stacked">Location</ion-label>
+           <ion-input  formControlName="location"></ion-input>    
+      </ion-item>
+
+      <div *ngIf="!addmatch.controls.location.valid && is_submit" class="valid">
+          Please enter location
+      </div>
+    
+        <ion-item no-padding>
+          <ion-icon icon-left  slot="start" name="calendar"></ion-icon>
+          <ion-label position="stacked">Date</ion-label>
+          <ion-datetime displayFormat="MM DD YY" disabled="true" field_clr placeholder="Select Date" formControlName="date"></ion-datetime>
+  
+         </ion-item>
+
+         <div *ngIf="!addmatch.controls.date.valid && is_submit" class="valid">
+            Please select date
+        </div>
+
+
+        <ion-item no-padding>
+          <ion-icon icon-left  slot="start" name="clock"></ion-icon>
+          <ion-label position="stacked">Start Time</ion-label>
+          <ion-input type="text" formControlName="stime" disabled="true"></ion-input>         
+
+        </ion-item>
+
+        <div *ngIf="!addmatch.controls.stime.valid && is_submit" class="valid">
+            Please select start time
+        </div>
+
+
+        <ion-item no-padding>
+          <ion-icon icon-left  slot="start" name="clock"></ion-icon>
+          <ion-label position="stacked">End Time</ion-label>
+     
+           <ion-input type="text" formControlName="etime" disabled="true"  ></ion-input> 
+                
+        </ion-item>
+
+        <div *ngIf="!addmatch.controls.etime.valid && is_submit" class="valid">
+            Please select end time
+        </div>
+       
+       
+        <ion-item no-padding>
+          <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+          <ion-label position="stacked">Players Playing</ion-label>
+             <ion-input type="number" formControlName="players"></ion-input>
+               
+            </ion-item>  
+            <div *ngIf="!addmatch.controls.players.valid && is_submit" class="valid">
+                Please enter number of players
+            </div>
+            
+            
+            <ion-item no-padding>
+                <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+                <img *ngIf="errors.indexOf(imgpath)==-1" [src]="sanitizer.bypassSecurityTrustResourceUrl(win.Ionic.WebView.convertFileSrc(imgpath))" />	
+                     <ion-label position="stacked">Upload Cover Picture</ion-label>
+                     <br>
+                     <br>
+                  <div  (click)="selectImage()" class="choose">Choose</div>
+                  <br>
+                
+                     
+                  </ion-item>  
+                  <div *ngIf="covererr && is_submit" class="valid">
+                      Please choose a cover
+                  </div> 
+
+        
+    </ion-list>
+    <ion-button type="submit" shape="round" expand="full">Add Match</ion-button>
+    </form>
+  </div>
+
+</ion-content>

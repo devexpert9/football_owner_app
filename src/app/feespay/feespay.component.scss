@@ -1,0 +1,41 @@
+[heading_ttl]{
+    ion-title{
+        background:#00afff;
+    }
+}
+.payment_dtl {
+    background: #fff;
+    color: #00afff;
+    text-align: center;
+    padding:25px 10px 10px 10px;
+    border-radius: 7px;
+    h3{
+        font-size: 16px;
+        margin: 0 0 25px 0;
+        line-height: 22px;
+        color: #000;
+        text-transform: initial;
+        font-weight: 700;
+        span{
+            color: #00aff0;
+        }
+    }
+    .modal_btn{
+        display: flex;
+        justify-content: space-evenly;
+        margin: 0 -10px -10px -10px;
+        ion-buttons {
+            color: #fff;
+            background: #00afff;
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 0px 0px 0px 7px;
+        }
+        [dismiss]{
+            background:#009fe8;
+            border-radius: 0px 0px 7px 0px;
+        }
+    }
+}

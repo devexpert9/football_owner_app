@@ -1,0 +1,46 @@
+<app-header [title]="title">
+</app-header>
+
+<ion-content bg-dark padding>
+  
+  <ion-item detail="false" lines="none" class="bg-list-nd" routerLink="/my-profile">
+		<span class="icon-stra"> <ion-icon name="person"></ion-icon> </span>
+		<ion-label>
+			<h2>Profile</h2>	 
+		</ion-label>
+		<ion-buttons slot="end">
+			<ion-icon name="ios-arrow-forward"></ion-icon>
+		</ion-buttons>
+   </ion-item>
+   <ion-item no-padding detail="false" class="bg-list-nd" lines="none" routerLink="/transactions">
+    <span class="icon-stra"> <ion-icon name="logo-usd"></ion-icon> </span>
+	 <ion-label>
+     <h2>Transactions</h2>	 
+     </ion-label>
+   <ion-buttons slot="end">
+       <ion-icon name="ios-arrow-forward"></ion-icon>
+   </ion-buttons>
+   </ion-item>
+
+   <ion-item detail="false" lines="none" class="bg-list-nd" routerLink="/notifications">
+    <span class="icon-stra"> <ion-icon name="notifications"></ion-icon> </span>
+	<ion-label>
+     <h2>Notifications</h2>	 
+     </ion-label>
+   <ion-buttons slot="end">
+       <ion-icon name="ios-arrow-forward"></ion-icon>
+   </ion-buttons>
+   </ion-item>
+
+   <ion-item detail="false" lines="none" class="bg-list-nd">
+     <span class="icon-stra"> <ion-icon name="star"></ion-icon> </span>
+	<ion-label>
+     <h2>Rate Us</h2>	 
+     </ion-label>
+   <ion-buttons slot="end">
+       <ion-icon name="ios-arrow-forward"></ion-icon>
+   </ion-buttons>
+   </ion-item>
+
+  </ion-content>
+

@@ -1,0 +1,29 @@
+
+<ion-header>
+  <ion-toolbar heading_ttl>
+    <ion-title>Write a Review</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content bg-dark padding>
+   <div class="cnl_booking">
+    <ion-buttons  (click)="myDismiss()" close_mdl><ion-icon icon_close ios="ios-close" md="md-close"></ion-icon></ion-buttons>
+     <h3>Write a <span>Review</span></h3>
+     <div class="msg_box">
+      <ion-item no-padding lines="none">
+        <!--ion-rating [(ngModel)]="rate" readonly="false" size="default" (ngModelChange)="onModelChange($event)"></ion-rating-->
+        <ion-rating [rate]="rate" readonly="false" size="default" (rateChange)="onRateChange($event)"></ion-rating>
+        
+      </ion-item>
+     </div>
+	 <div class="msg_box">
+      <ion-item no-padding>
+          <ion-textarea rows="4" cols="20" placeholder="Comment"></ion-textarea>
+        </ion-item>
+	  
+     </div>
+     <div class="modal_btn">
+        <ion-buttons>Send</ion-buttons>
+     </div>
+   </div>
+</ion-content>

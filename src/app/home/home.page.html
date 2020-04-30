@@ -1,0 +1,94 @@
+<app-header [title]="title"></app-header>
+<ion-content bg-dark content-padding>
+	<ion-row>
+		<ion-col size="12">
+			<div class="search-bxs">
+				<ion-input placeholder="Search........" (keyup)="searchmatch($event)"></ion-input>
+				<ion-icon name="search"></ion-icon>
+			</div>
+		</ion-col>
+	</ion-row>
+
+	<span *ngIf="response1_came && response2_came">
+	<ion-row>
+		<ion-col size="12" *ngIf="!searching">
+			<h4 class="main-ttls"> Today's Matches </h4>	
+			<p  *ngIf="noToday"  class="notfound"> No matches found </p>		
+			<div class="ion-slider">
+				<ion-slides pager="true" [options]="slideOptsOne" #slideWithNav
+			  >
+		
+
+			  <ion-slide *ngFor="let match of matchlist">
+				<div class="box-imgs-sa">
+					<img src="{{url}}{{match.cover}}" class="main-img">
+					<div class="cont-sts">
+						<h4 class="name-h" routerLink="/match-details/{{match._id}}">{{match.name}} <span class="bagd-srs"> {{match.status}} Joined </span> </h4>
+						<div class="location-sc">
+							<ion-icon name="pin"></ion-icon> {{match.location}} 
+						</div>
+						<ul class="list-dts">
+							<li> <ion-icon name="calendar"></ion-icon> {{match.date | date : 'd MMM, y' }}  </li>
+							<li> <ion-icon name="time"></ion-icon> {{match.stime}} To {{match.etime}} </li>
+						</ul>
+					</div>
+				</div>
+			  </ion-slide>
+
+		
+			 
+			  
+			</ion-slides>
+
+			</div>
+		</ion-col>
+	</ion-row>
+	<ion-row>
+		<ion-col size="12">
+			<h4 class="main-ttls mrgn-cstm" *ngIf="!searching"> Upcoming Matches </h4>
+			<h4 class="main-ttls" *ngIf="searching"> Results for search... </h4>
+			<p class="main-ttls" *ngIf="noresults"  class="searcherror"> No results found for {{keyword}} </p>
+			<p  *ngIf="noUpcoming"  class="notfound"> No matches found </p>
+		</ion-col>
+	</ion-row>
+	<ion-row >
+			
+		<ion-col size="6" *ngFor="let upcomingmatch of upcominglist">
+			<div class="box-imgs-sa small-2-box">
+				<img src="{{url}}{{upcomingmatch.cover}}" class="main-img">
+				<span class="bagd-joins"> {{upcomingmatch.status}} Joined </span>
+				<div class="cont-sts">
+					<h4 class="name-h" routerLink="/match-details/{{upcomingmatch._id}}">{{upcomingmatch.name}}</h4>
+					<ul class="list-dts">
+						<li> <ion-icon name="pin"></ion-icon> {{upcomingmatch.location}} </li>
+						<li> <ion-icon name="calendar"></ion-icon> {{upcomingmatch.date | date : 'd MMM, y' }} <ion-icon name="time"></ion-icon>{{upcomingmatch.stime}}</li>
+					</ul>
+				</div>
+			</div>
+		</ion-col>
+
+
+	</ion-row>
+ </span>
+
+<!-- ============skeleton============ -->
+
+
+	<span *ngIf="!response1_came && !response2_came">	
+	
+		 <ion-row >
+				<ion-col size="6" *ngFor="let upcomingmatch of skeleton">
+							  <div >  				
+								<ion-thumbnail slot="start" class="skeleton">
+								  <ion-skeleton-text animated></ion-skeleton-text>
+								</ion-thumbnail>		
+							  </div>
+				 </ion-col>
+		</ion-row>
+
+
+
+    </span>
+
+
+</ion-content>

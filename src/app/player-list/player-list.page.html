@@ -1,0 +1,33 @@
+<app-header [title]="title"></app-header>
+
+<ion-content bg-dark>
+	<div mainDetails>
+		<div players>
+      <h4>Players in nearest areas</h4>
+      
+      <!-- <p *ngIf="nolocation">Please enable location and click retry</p> -->
+      <p *ngIf="nolocation" style="color:grey">Please enable phone location and click retry</p>
+      <button (click)="getPlayers()" *ngIf="nolocation">Retry</button>
+
+			<ion-item no-padding lines="none" *ngFor="let player of playerlist">
+        <ion-avatar slot="start">
+          <img *ngIf="errors.indexOf(player.pic)>=0" src="assets/images/default-avatar.jpg">
+          <img  *ngIf="errors.indexOf(player.pic)==-1" src="{{url+player.pic}}">
+        </ion-avatar>
+        <ion-label  no-lines>
+          <h2><span routerLink="/player-detail">{{player.fname[0].toUpperCase()+player.fname.slice(1)}} {{player.lname[0].toUpperCase()+player.lname.slice(1)}} </span><ion-button (click)="presentModal()">Invite</ion-button></h2>
+          <div position>
+            <h5><i class="fa fa-street-view" aria-hidden="true"></i>  <span>{{player.position}}</span></h5>
+            <h5><i class="fa fa-futbol-o" aria-hidden="true"></i>  <span>{{player.goals}}</span></h5>
+            <h5><i class="fa fa-map-marker" aria-hidden="true"></i> <span>{{player.city}}</span></h5>
+          </div>
+        </ion-label>
+      </ion-item>
+
+
+
+
+		</div>		
+	</div>
+    <p  *ngIf="noplayerlist"  class="notfound">No nearby players found</p>
+</ion-content>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "440743066404",
+    "firebase_url": "https://footbal-owner.firebaseio.com",
+    "project_id": "footbal-owner",
+    "storage_bucket": "footbal-owner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440743066404:android:3f35466bb55c97cdebd1b1",
+        "android_client_info": {
+          "package_name": "io.ionic.matchowner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "440743066404-4tv7gkn8lmguah6pf8cfqarubao5g25u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwJSwzEuTcZsqD6bj8aLtKpTqzMzoAoCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "440743066404-4tv7gkn8lmguah6pf8cfqarubao5g25u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

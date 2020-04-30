@@ -1,0 +1,79 @@
+<app-header [title]="title"></app-header>
+
+<ion-content bg-dark padding>
+  <ion-row *ngIf="response_came">
+
+    <ion-col size-md="12">
+      <p *ngIf="notiArray?.length==0" style="margin-left: 22%;color: grey">No notification(s) found</p>
+      <ion-list usr_notification lines="none" *ngFor="let item of notiArray;let i=index" >
+
+
+        <ion-item no-margin no-padding  lines="none" *ngIf="item?.type==2">
+            <ion-avatar slot="start">
+                <img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+                <img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{purl+item?.pic}}">
+            </ion-avatar>
+            <ion-label no-lines>
+              <strong>{{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}</strong> has joined the <a routerLink="/match-details/{{item?._id}}">match</a>.
+            </ion-label>
+            
+            <ion-badge color="primary" (click)="clear(item?.noti_id,i)">Clear</ion-badge>
+          </ion-item>
+
+
+          <ion-item no-margin no-padding  lines="none" *ngIf="item?.type==3">
+              <ion-avatar slot="start">
+                  <img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+                  <img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{purl+item?.pic}}">
+              </ion-avatar>
+              <ion-label no-lines>
+                <strong>{{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}</strong> has requested for the <a routerLink="/field-requests">field</a>.
+              </ion-label>
+              <ion-badge color="primary" (click)="clear(item?.noti_id,i)">Clear</ion-badge>
+            </ion-item>
+
+            <ion-item no-margin no-padding  lines="none" *ngIf="item?.type==5">
+                <ion-avatar slot="start">
+                    <img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+                    <img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{purl+item?.pic}}">
+                </ion-avatar>
+                <ion-label no-lines>
+                  <strong>{{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}</strong> has left the <a routerLink="/match-details/{{item?._id}}">match</a>.
+                </ion-label>
+                <ion-badge color="primary" (click)="clear(item?.noti_id,i)">Clear</ion-badge>
+              </ion-item>
+
+              <ion-item no-margin no-padding  lines="none" *ngIf="item?.type==7">
+                <ion-avatar slot="start">
+                    <img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+                    <img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{murl+item?.pic}}">
+                </ion-avatar>
+                <ion-label no-lines>You got ${{item?.amount}} for
+                   <a routerLink="/match-details/{{item?._id}}">match</a>.
+                </ion-label>
+                <ion-badge color="primary" (click)="clear(item?.noti_id,i)">Clear</ion-badge>
+              </ion-item>
+       
+      </ion-list>
+    </ion-col>
+  </ion-row>
+
+<!-- ==========skeleton===== -->
+<!-- Skeleton screen -->
+<div *ngIf="!response_came">
+  
+    <div class="ion-padding custom-skeleton" *ngFor="let item of skeleton">
+      
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+    </div>
+  
+
+  
+   
+  </div>
+  
+</ion-content>
