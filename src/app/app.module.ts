@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SelectFavComponent } from "./select-fav/select-fav.component";
+import { SelectTeamPage } from "./select-team/select-team.page";
 import { CancelbookingComponent } from "./cancelbooking/cancelbooking.component";
 import { CancelmatchComponent } from "./cancelmatch/cancelmatch.component";
 import { AddReviewComponent } from "./add-review/add-review.component";
@@ -21,10 +22,13 @@ import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { AlertController } from '@ionic/angular';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 @NgModule({
-  declarations: [AppComponent , SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
-  entryComponents: [SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
+  declarations: [SelectTeamPage,AppComponent , SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
+  entryComponents: [SelectTeamPage, SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
   Ng4GeoautocompleteModule,
     HttpModule,
     BrowserModule,

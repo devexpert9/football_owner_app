@@ -15,6 +15,7 @@ import { ModalController } from '@ionic/angular';
 import { SelectFavComponent } from '../select-fav/select-fav.component';
 import {  } from '@ionic-native/in-app-browser/ngx';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
+import { SelectTeamPage } from "../select-team/select-team.page";
 @Component({
   selector: 'app-add-match',
   templateUrl: './add-match.page.html',
@@ -35,6 +36,13 @@ export class AddMatchPage implements OnInit {
   etime:any;
   stripe_id:boolean=false;
   alldata:any;
+  btn1:any;
+  btn2:any;
+  team1_player_ids:any;
+  team2_player_ids:any;
+  team1_team_id:any;
+  team2_team_id:any;
+  reqData:any;
   constructor(public modalController: ModalController,
     public formBuilder: FormBuilder,	
     private filePath: FilePath,
@@ -78,9 +86,10 @@ export class AddMatchPage implements OnInit {
          stime:['',Validators.compose([Validators.required])],
          etime:['',Validators.compose([Validators.required])],
          players:['',Validators.compose([Validators.required])],
-         team1:['',Validators.compose([Validators.required])],
-         team2:['',Validators.compose([Validators.required])]
-        
+        //  team1:['',Validators.compose([Validators.required])],
+        //  team2:['',Validators.compose([Validators.required])],
+         type:['',Validators.compose([Validators.required])],
+         gender:['',Validators.compose([Validators.required])]
        
     });
   }
@@ -88,10 +97,18 @@ export class AddMatchPage implements OnInit {
     const modal = await this.modalController.create({
       component: SelectFavComponent
     });
+
+    modal.onDidDismiss().then((detail) => {
+      console.log(detail)
+
+       if(detail.data==1){
+        console.log(detail);
+       }
+ 
+     });
+
     return await modal.present();
   }
-
-
 
   async selectImage() {
     this.imgpath='';
@@ -293,12 +310,80 @@ takePicture(sourceType: PictureSourceType) {
 
 
 
-// browser.on('loadstop').subscribe(event => {
-//    browser.insertCSS({ code: "body{color: red;" });
-// });
+  }
 
-// browser.close();
 
+  async presentModal2(team, type) {
+    if(type==1){
+      this.reqData = {
+        team:team,
+        player_ids: this.team1_player_ids,
+        team_id: this.team1_team_id,
+        type: 1
+       }
+
+    }else{
+      this.reqData = {
+        team:team,
+        player_ids: this.team2_player_ids,
+        team_id: this.team2_team_id,
+        type: 2
+       }
+
+
+    }
+  
+
+    const modal = await this.modalController.create({
+      component: SelectTeamPage,
+      componentProps: this.reqData
+
+    });
+
+
+
+    modal.onDidDismiss().then((detail) => {
+       console.log(detail)
+
+       if(detail.data.team_type==1){
+
+                  this.btn1= detail.data.name;
+                  if(detail.data.type==1){
+
+                   
+                    this.team1_team_id= detail.data.team_id
+                  
+                  }  else{
+            
+                   
+                    this.team1_player_ids= detail.data.player_ids
+                  
+                  }
+
+
+       }else{  
+
+                  this.btn2= detail.data.name;
+                  if(detail.data.type==1){
+
+                     
+                      this.team2_team_id= detail.data.team_id
+                    
+                    }  else{
+              
+                      
+                      this.team2_player_ids= detail.data.player_ids
+                    
+                    }
+
+
+    }
+
+    
+ 
+     });
+
+    return await modal.present();
   }
 
 }

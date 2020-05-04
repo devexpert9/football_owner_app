@@ -1,0 +1,109 @@
+<ion-content bg-dark content-padding>
+
+	<h2 class="heading">{{team}}</h2>
+	<ion-row>
+		<ion-col size="12">
+      <!-- <h4  class="main-ttls mrgn-cstm"> Matches <ion-button size="small" routerLink="/update-results" class="ad_results">Add Results</ion-button></h4> -->
+      
+		</ion-col>
+	</ion-row>
+	<ion-row>
+		<ion-col size="12">
+			<!-- Default Segment -->
+			<ion-segment match_tab scrollable [(ngModel)]="matches">
+			  <ion-segment-button value="all">
+			    <ion-label>Teams</ion-label>
+			  </ion-segment-button>
+			  <ion-segment-button value="previous">
+			    <ion-label>Players</ion-label>
+			  </ion-segment-button>
+			  
+			</ion-segment>
+
+			<div segment-content [(ngSwitch)]="matches">
+				
+		<div *ngSwitchDefault ngSelected="selected" >
+
+			<ion-item *ngFor="let item of teamslist">
+				<ion-avatar slot="start">
+					<img *ngIf="errors.indexOf(item?.cover)>=0" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS9eeKPfcvOBC_Aqznjqjfa15rxsRWkeruER9S8xMBtJHVf6dht&usqp=CAU">
+					<img  *ngIf="errors.indexOf(item?.cover)==-1" src="{{team_url+item?.cover}}">
+				</ion-avatar>
+				<ion-label>{{item.name}}</ion-label>
+				<ion-checkbox color="primary" (click)="myDismiss(1, item._id, item.name)"></ion-checkbox>
+			  </ion-item>
+
+	    </div>
+     
+				<div *ngSwitchCase="'previous'">
+				<ion-item no-padding>
+						<ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
+						<ion-label position="stacked">Team Name</ion-label>
+						<ion-input type="text" value="{{team_name}}" [(ngModel)]="team_name"></ion-input>    
+				</ion-item>
+
+					<ion-button btn_done class="button_done" (click)="myDismiss(2,'', team_name)">Save</ion-button >
+					<ion-item *ngFor="let item of playerlist">
+						<ion-avatar slot="start">
+							<img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+							<img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{url+item?.pic}}">
+						</ion-avatar>
+						<ion-label>
+
+							{{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}
+
+						</ion-label>
+						<ion-checkbox color="primary" (click)="FieldsChange($event,item._id)"></ion-checkbox>
+					  </ion-item>
+					
+					  
+				
+				</div>
+
+			
+			</div>
+
+
+	<!-- //skeleton -->
+
+
+			<div segment-content [(ngSwitch)]="matches" *ngIf="1==2">
+					
+					<div *ngSwitchDefault ngSelected="selected" >
+												
+							 <ion-row >
+									<ion-col size="6" *ngFor="let upcomingmatch of skeleton">
+												  <div >  				
+													<ion-thumbnail slot="start" class="skeleton">
+													  <ion-skeleton-text animated></ion-skeleton-text>
+													</ion-thumbnail>		
+												  </div>
+									 </ion-col>
+							</ion-row>
+					
+					</div>
+	
+					<div *ngSwitchCase="'previous'">
+						<ion-row mr-m-5>
+							
+								<ion-row >
+										<ion-col size="6" *ngFor="let upcomingmatch of skeleton">
+													  <div >  				
+														<ion-thumbnail slot="start" class="skeleton">
+														  <ion-skeleton-text animated></ion-skeleton-text>
+														</ion-thumbnail>		
+													  </div>
+										 </ion-col>
+								</ion-row>					
+						</ion-row>				
+					</div>		
+				</div>
+
+	<!-- //skeleton -->
+
+
+
+
+		</ion-col>
+	</ion-row>
+</ion-content>

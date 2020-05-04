@@ -33,11 +33,6 @@ export class AppComponent {
       icon: 'person'
     },
     {
-      title: 'Add Match Results',
-      url: '/matches-list',
-      icon: 'person'
-    },
-    {
       title: 'Notifications',
       url: '/tabs/tabs/notifications',
       icon: 'notifications'

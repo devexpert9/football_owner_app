@@ -4,16 +4,46 @@
 	<div addProperty *ngIf="stripe_id">
       <form [formGroup]="addmatch" (ngSubmit)="addmatchnow()">
 		<ion-list UserDetails>
-	   <ion-item no-padding>
+
+<!-- ///// -->
+
+
+      <ion-item no-padding>
 			  <ion-icon icon-left slot="start" name="business"></ion-icon>
-	 		  <ion-label position="stacked">Match Name</ion-label>
-           <ion-input  formControlName="name"></ion-input>         
-        </ion-item>
-        <div *ngIf="!addmatch.controls.name.valid && is_submit" class="valid">
-            Please enter name
+         <ion-label position="stacked">Type</ion-label>
+         
+         <ion-select placeholder="Type" formControlName="type">
+          <ion-select-option value="5v5">5v5</ion-select-option>
+          <ion-select-option value="6v6">6v6</ion-select-option>
+        </ion-select>
+
+     </ion-item>
+        <div *ngIf="!addmatch.controls.type.valid && is_submit" class="valid">
+            Please select type
         </div>
 
+
         <ion-item no-padding>
+          <ion-icon icon-left slot="start" name="business"></ion-icon>
+           <ion-label position="stacked">Gender</ion-label>
+           
+           <ion-select placeholder="Gender" formControlName="gender">
+            <ion-select-option value="m">Male</ion-select-option>
+            <ion-select-option value="f">Female</ion-select-option>
+            <ion-select-option value="coed">Co Ed</ion-select-option>
+        </ion-select>
+  
+          </ion-item>
+          <div *ngIf="!addmatch.controls.gender.valid && is_submit" class="valid">
+              Please select gender
+          </div>
+
+<!-- ////// -->
+
+
+
+
+        <!-- <ion-item no-padding>
           <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
           <ion-label position="stacked">Team1</ion-label>
              <ion-input  formControlName="team1"></ion-input>    
@@ -31,7 +61,9 @@
   
         <div *ngIf="!addmatch.controls.team2.valid && is_submit" class="valid">
             Please enter Team2 name
-        </div>
+        </div> -->
+
+
 
         
 		 <ion-item no-padding>
@@ -89,24 +121,60 @@
             <div *ngIf="!addmatch.controls.players.valid && is_submit" class="valid">
                 Please enter number of players
             </div>
+
+
+
+            <!-- ////////// -->
+
+            <ion-item no-padding>
+              <ion-icon icon-left slot="start" name="business"></ion-icon>
+               <ion-label position="stacked">Match Name</ion-label>
+                 <ion-input  formControlName="name"></ion-input>         
+              </ion-item>
+              <div *ngIf="!addmatch.controls.name.valid && is_submit" class="valid">
+                  Please enter name
+              </div>
+      
+              <ion-button  shape="round" expand="full" (click)="presentModal2('Team 1', 1)" *ngIf="errors.indexOf(btn1)>=0">Select Team1</ion-button>
+              <ion-button  shape="round" expand="full" (click)="presentModal2('Team 1', 1)" *ngIf="errors.indexOf(btn1)==-1">{{btn1}}</ion-button>
+
+              <h3 style="    text-align: center;
+              color: white;">VS</h3>
+      
+              <div *ngIf="is_submit" class="valid">
+                select team1
+              </div>
+
+              <ion-button  shape="round" expand="full" (click)="presentModal2('Team 2', 2)" *ngIf="errors.indexOf(btn1)>=0">Select Team2</ion-button>
+              <ion-button  shape="round" expand="full" (click)="presentModal2('Team 2', 2)" *ngIf="errors.indexOf(btn1)==-1">{{btn2}}</ion-button>
+      
+              <!-- <ion-button shape="round" expand="full" (click)="presentModal2('Team 2', 2)">Select Team2</ion-button> -->
+      
+              <div *ngIf="is_submit" class="valid">
+                select team2
+              </div>
+
+              <br>
+
+
+            <!-- /////// -->
             
             
             <ion-item no-padding>
                 <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
-                 <ion-label position="stacked">Upload Cover Picture</ion-label>
-                    <br>
-                     <br>
-                  <div  (click)="selectImage()" class="choose">Choose</div>
+               
+                  <div  (click)="selectImage()" class="choose">Upload Cover Picture</div>
                   <br>
 
                 <img *ngIf="errors.indexOf(imgpath)==-1" [src]="sanitizer.bypassSecurityTrustResourceUrl(win.Ionic.WebView.convertFileSrc(imgpath))" />	
               
                 
                      
-                  </ion-item>  
-                  <div *ngIf="covererr && is_submit" class="valid">
-                      Please choose a cover
-                  </div> 
+            </ion-item>  
+          
+          <div *ngIf="covererr && is_submit" class="valid">
+              Please choose a cover
+          </div> 
 
         
     </ion-list>

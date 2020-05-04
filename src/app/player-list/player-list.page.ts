@@ -22,6 +22,7 @@ export class PlayerListPage implements OnInit {
   nolocation:boolean=false;
   url:any=config.API_URL+'server/data/p_pics/';
   errors:any=['',null,undefined,'null','undefined'];
+  _id:any=localStorage.getItem('_id');
   constructor(
     public modalController: ModalController,
      public router: Router,
@@ -49,7 +50,7 @@ export class PlayerListPage implements OnInit {
   getPlayers(){
     this.notifi.presentLoading();
     this.geolocation.getCurrentPosition().then((resp) => { 
-      this.apiservice.post('getnearbyUsers',{lat:resp.coords.latitude,lng:resp.coords.longitude,miles:50},'').subscribe((result) => {  
+      this.apiservice.post('getnearbyUsers',{lat:resp.coords.latitude,lng:resp.coords.longitude,miles:50, _id: this._id},'').subscribe((result) => {  
         this.nolocation=false;      
         this.notifi.stopLoading();              
         this.playerres=result;
