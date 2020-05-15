@@ -20,7 +20,7 @@
 <ion-row plr_prt_m *ngFor="let item of transactions; let i= index">
 	<ion-col size="3">{{i+1}}</ion-col>
 	<ion-col size="2">{{item?.payId}}</ion-col>
-	<ion-col size="2" *ngIf="item?.type==1">Match completion</ion-col>
+	<ion-col size="2" *ngIf="item?.type==1">Match joined</ion-col>
 	<ion-col size="2" *ngIf="item?.type==3">Field Request</ion-col>
 	<ion-col size="3" date_col>{{item?.createdAt| date : 'd MMM, y' }}
 		<span>{{item?.date| date : 'shortTime' }}</span>

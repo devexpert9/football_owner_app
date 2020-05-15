@@ -82,6 +82,7 @@ export class MatchDetailsPage implements OnInit {
     this.response2_came=false; 
     this.response1_came=false; 
     this.match_id= this.ActivatedRoute.snapshot.paramMap.get('_id');
+    console.log(this.match_id);
     this.getjoinresult=[];
     this.matchdetail();
     this.getJoinMatch();
@@ -145,12 +146,19 @@ export class MatchDetailsPage implements OnInit {
       
         if(this.getjoinres.status == 1){   
            this.onlyplayers= this.getjoinres.playersList;
+          
+           var cont=0;
           for(let key of  this.getjoinres.playersList){
             this.getjoinresult.push(key._id);
+            cont++
+            if(cont==this.getjoinres.playersList.length){
+
+              this.noOfPlayers= this.getjoinresult.length;
+            }
 
           }         
 
-          this.noOfPlayers= this.getjoinresult.length;
+      
          
         }else{
           this.getjoinresult=[];

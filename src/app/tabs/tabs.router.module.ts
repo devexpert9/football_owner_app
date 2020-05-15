@@ -23,7 +23,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-              import('../matches-list/matches-list.module').then(m => m.MatchesListPageModule)
+              import('../add-match/add-match.module').then(m => m.AddMatchPageModule)
           }
         ]
       },

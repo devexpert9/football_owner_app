@@ -23,10 +23,12 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { AlertController } from '@ionic/angular';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { NgxStarsModule } from 'ngx-stars';
 @NgModule({
   declarations: [SelectTeamPage,AppComponent , SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
   entryComponents: [SelectTeamPage, SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
   imports: [
+    NgxStarsModule,
     FormsModule,
     ReactiveFormsModule,
   Ng4GeoautocompleteModule,

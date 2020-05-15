@@ -11,7 +11,7 @@
 				<img *ngIf="errors.indexOf(matchlist?.owner.pic)>=0" src="assets/images/default-avatar.jpg">
 			<img  *ngIf="errors.indexOf(matchlist?.owner.pic)==-1" src="{{url+matchlist?.owner.pic}}">
 			<div class="inn_info">
-				<h5>Robert Downy Jr<span class="owner-lsr">Owner</span></h5>
+				<h5>{{name}}<span class="owner-lsr">Owner</span></h5>
 				<div class="btn-who">
 					<a class="invit-frn" href="javascript:void(0);" (click)="presentModal()" *ngIf="!matchcandeled && noOfPlayers < matchlist?.match.players">Invite Players</a>
 					<a class="btn-cancl" href="javascript:void(0);" (click)="presentModal2()" *ngIf="!matchcandeled">Cancel</a>

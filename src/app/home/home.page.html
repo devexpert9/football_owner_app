@@ -21,7 +21,12 @@
 
 			  <ion-slide *ngFor="let match of matchlist">
 				<div class="box-imgs-sa">
-					<img src="{{url}}{{match.cover}}" class="main-img">
+
+
+					<img src="assets/images/woman.png" class="main-img"  *ngIf="match.gender=='f'">
+					<img src="assets/images/centre.png" class="main-img"  *ngIf="match.gender=='coed'">
+					<img src="assets/images/ma.png" class="main-img"  *ngIf="match.gender=='m'">
+
 					<div class="cont-sts">
 						<h4 class="name-h" routerLink="/match-details/{{match._id}}">{{match.name}} <span class="bagd-srs"> {{match.status}} Joined </span> </h4>
 						<div class="location-sc">
@@ -55,7 +60,13 @@
 			
 		<ion-col size="6" *ngFor="let upcomingmatch of upcominglist">
 			<div class="box-imgs-sa small-2-box">
-				<img src="{{url}}{{upcomingmatch.cover}}" class="main-img">
+				
+				<img src="assets/images/woman.png"  class="main-img"  *ngIf="upcomingmatch.gender=='f'">
+
+				<img src="assets/images/centre.png" class="main-img" *ngIf="upcomingmatch.gender=='coed'">
+
+				<img src="assets/images/ma.png" class="main-img"    *ngIf="upcomingmatch.gender=='m'">
+
 				<span class="bagd-joins"> {{upcomingmatch.status}} Joined </span>
 				<div class="cont-sts">
 					<h4 class="name-h" routerLink="/match-details/{{upcomingmatch._id}}">{{upcomingmatch.name}}</h4>

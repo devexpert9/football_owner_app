@@ -57,6 +57,7 @@ export class UpcomingMatchdetailsPage implements OnInit {
   response1_came:any=false;
   response2_came:any=false;
   skeleton:any=[];
+  name:any;
     constructor(
       public modalController: ModalController,
       private filePath: FilePath,
@@ -76,6 +77,7 @@ export class UpcomingMatchdetailsPage implements OnInit {
 
     ) {      
      this.skeleton=[1,2,3,4,5,6,7,8,9,1,2,2,3,4,5,6,7,65,4,2,3,4,5,6,7,8]
+     this.name= this.alldata.fname[0].toUpperCase()+this.alldata.fname.slice(1)+' '+this.alldata.lname[0].toUpperCase()+this.alldata.lname.slice(1);
   }
   ionViewDidEnter(){
     this.response2_came=false; 

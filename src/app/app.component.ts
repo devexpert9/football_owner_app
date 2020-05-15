@@ -28,9 +28,9 @@ export class AppComponent {
       icon: 'person'
     },
     {
-      title: 'Add Match',
-      url: '/add-match',
-      icon: 'person'
+      title: 'My Matches',
+      url: '/matches-list',
+      icon: 'football'
     },
     {
       title: 'Notifications',

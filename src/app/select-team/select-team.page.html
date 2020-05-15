@@ -1,6 +1,6 @@
 <ion-content bg-dark content-padding>
-
-	<h2 class="heading">{{team}}</h2>
+    <ion-icon name="close-circle" class="close_icon" (click)="closeModal()"></ion-icon>
+	<h2 class="heading">{{team_static_name}}</h2>
 	<ion-row>
 		<ion-col size="12">
       <!-- <h4  class="main-ttls mrgn-cstm"> Matches <ion-button size="small" routerLink="/update-results" class="ad_results">Add Results</ion-button></h4> -->
@@ -20,7 +20,7 @@
 			  
 			</ion-segment>
 
-			<div segment-content [(ngSwitch)]="matches">
+			<div segment-content [(ngSwitch)]="matches" *ngIf="response_came">
 				
 		<div *ngSwitchDefault ngSelected="selected" >
 
@@ -30,7 +30,7 @@
 					<img  *ngIf="errors.indexOf(item?.cover)==-1" src="{{team_url+item?.cover}}">
 				</ion-avatar>
 				<ion-label>{{item.name}}</ion-label>
-				<ion-checkbox color="primary" (click)="myDismiss(1, item._id, item.name)"></ion-checkbox>
+				<ion-checkbox color="primary" (ionChange)="myDismiss(1, item._id, item.name)" [checked]="selected_team_id == item._id ? true : false"></ion-checkbox>
 			  </ion-item>
 
 	    </div>
@@ -42,7 +42,7 @@
 						<ion-input type="text" value="{{team_name}}" [(ngModel)]="team_name"></ion-input>    
 				</ion-item>
 
-					<ion-button btn_done class="button_done" (click)="myDismiss(2,'', team_name)">Save</ion-button >
+					<ion-button btn_done class="button_done" (click)="myDismiss(2,'', team_name)" [disabled]="ids.length==0 ? true: false">Save</ion-button >
 					<ion-item *ngFor="let item of playerlist">
 						<ion-avatar slot="start">
 							<img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
@@ -53,7 +53,7 @@
 							{{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}
 
 						</ion-label>
-						<ion-checkbox color="primary" (click)="FieldsChange($event,item._id)"></ion-checkbox>
+						<ion-checkbox color="primary" (ionChange)="FieldsChange($event,item._id)" [disabled]="(ids.length == limit && ids.indexOf(item._id)==-1 )? true : false " [checked]= "selected_player_ids?.indexOf(item._id) >= 0 ? true : false" ></ion-checkbox>
 					  </ion-item>
 					
 					  
@@ -67,34 +67,32 @@
 	<!-- //skeleton -->
 
 
-			<div segment-content [(ngSwitch)]="matches" *ngIf="1==2">
+			<div segment-content [(ngSwitch)]="matches" *ngIf="!response_came">
 					
 					<div *ngSwitchDefault ngSelected="selected" >
 												
-							 <ion-row >
-									<ion-col size="6" *ngFor="let upcomingmatch of skeleton">
-												  <div >  				
-													<ion-thumbnail slot="start" class="skeleton">
-													  <ion-skeleton-text animated></ion-skeleton-text>
-													</ion-thumbnail>		
-												  </div>
-									 </ion-col>
-							</ion-row>
+						<div class="ion-padding custom-skeleton" *ngFor="let item of skeleton">
+      
+							<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+							<ion-skeleton-text animated></ion-skeleton-text>
+							<ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+							<ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+							<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+						  </div>
 					
 					</div>
 	
 					<div *ngSwitchCase="'previous'">
 						<ion-row mr-m-5>
 							
-								<ion-row >
-										<ion-col size="6" *ngFor="let upcomingmatch of skeleton">
-													  <div >  				
-														<ion-thumbnail slot="start" class="skeleton">
-														  <ion-skeleton-text animated></ion-skeleton-text>
-														</ion-thumbnail>		
-													  </div>
-										 </ion-col>
-								</ion-row>					
+							<div class="ion-padding custom-skeleton" *ngFor="let item of skeleton">
+      
+								<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+								<ion-skeleton-text animated></ion-skeleton-text>
+								<ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+								<ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+								<ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+							  </div>					
 						</ion-row>				
 					</div>		
 				</div>

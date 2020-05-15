@@ -46,7 +46,9 @@
 	<ion-col size="2">Goals</ion-col>
 </ion-row>
 
-<ion-row plr_prt_m *ngFor="let player of onlyplayers">
+
+
+<!-- <ion-row plr_prt_m *ngFor="let player of onlyplayers">
 	
 			<ion-col size="2">
 					<img *ngIf="errors.indexOf(player?.pic)>=0" src="assets/images/default-avatar.jpg">
@@ -57,7 +59,33 @@
 			<ion-col size="2">{{player?.goals}}</ion-col>
 
 	
-	</ion-row>
+	</ion-row> -->
+
+	<span *ngFor="let player of onlyplayers">
+
+		<ion-row plr_prt_m style="padding-bottom: 22px;">
+		
+					<ion-col size="2">
+							<img *ngIf="errors.indexOf(player?.pic)>=0" src="assets/images/default-avatar.jpg">
+							<img  *ngIf="errors.indexOf(player?.pic)==-1" src="{{purl+player?.pic}}">
+					</ion-col>
+				
+					<br>
+					<ion-col size="5">{{player?.fname[0].toUpperCase()+player?.fname.slice(1)}} {{player?.lname[0].toUpperCase()+player?.lname.slice(1)}}</ion-col>
+					<ion-col size="3">{{player?.position}}</ion-col>
+					<ion-col size="2">{{player?.goals}}</ion-col>
+		
+					<div style="margin-top: -7px;margin-left: 76px;">
+			
+						<ngx-stars  [size]="1" [maxStars]="5" [readonly]="true" [initialStars]="player?.points"></ngx-stars>
+				
+					</div>
+			</ion-row>
+			
+
+
+</span>
+
 
 	<p *ngIf="onlyplayers.length==0" class="notfound">No player has joined this match yet</p>
   </span>

@@ -16,6 +16,7 @@ import { SelectFavComponent } from '../select-fav/select-fav.component';
 import {  } from '@ionic-native/in-app-browser/ngx';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
 import { SelectTeamPage } from "../select-team/select-team.page";
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-add-match',
   templateUrl: './add-match.page.html',
@@ -36,13 +37,19 @@ export class AddMatchPage implements OnInit {
   etime:any;
   stripe_id:boolean=false;
   alldata:any;
-  btn1:any;
-  btn2:any;
-  team1_player_ids:any;
-  team2_player_ids:any;
+  btn1:any='Team 1';
+  btn2:any='Team 2';
+  team1_player_ids:any=[];
+  team2_player_ids:any=[];
   team1_team_id:any;
   team2_team_id:any;
   reqData:any;
+  limit:any;
+  team1_name:any='Team 1';
+  team2_name:any='Team 2';
+  team_1_type:any=0;
+  team_2_type:any=0;
+
   constructor(public modalController: ModalController,
     public formBuilder: FormBuilder,	
     private filePath: FilePath,
@@ -58,7 +65,8 @@ export class AddMatchPage implements OnInit {
     public apiservice:ApiService,
     public notifi:NotiService,
     public sanitizer:DomSanitizer,
-    private iab: InAppBrowser 
+    private iab: InAppBrowser,
+    public alertController: AlertController 
     ) {
          this.date= new Date().toISOString();
        this.makeform();
@@ -68,6 +76,8 @@ export class AddMatchPage implements OnInit {
   ngOnInit() {
   }
   ionViewDidEnter(){
+    
+    
     this.stripe_id = false;
     this.alldata= JSON.parse(localStorage.getItem('user'));    
      
@@ -85,11 +95,8 @@ export class AddMatchPage implements OnInit {
          date:['',Validators.compose([Validators.required])],
          stime:['',Validators.compose([Validators.required])],
          etime:['',Validators.compose([Validators.required])],
-         players:['',Validators.compose([Validators.required])],
-        //  team1:['',Validators.compose([Validators.required])],
-        //  team2:['',Validators.compose([Validators.required])],
-         type:['',Validators.compose([Validators.required])],
-         gender:['',Validators.compose([Validators.required])]
+         type:['5',Validators.compose([Validators.required])],
+         gender:[null,Validators.compose([Validators.required])]
        
     });
   }
@@ -196,59 +203,47 @@ takePicture(sourceType: PictureSourceType) {
   
    this.is_submit=true;  
 
-   if(this.errors.indexOf(this.imgpath)==-1 && this.addmatch.valid){
-    this.file.resolveLocalFilesystemUrl(this.imgpath)
-    .then(entry => {
-        ( < FileEntry > entry).file(file => {
-          console.log('read file');
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            console.log('onloadend');
-            const imgBlob = new Blob([reader.result], {
-              type: file.type
-          });
-          this.uploadmatch(imgBlob,file.name);           
-        }
-        reader.readAsArrayBuffer(file);
-
-        })
-    })
-    .catch(err => {
-        this.notifi.presentToast('Error while reading file.','danger');
-    });     
-  }else{
-    this.covererr=true;
-  } 
+   if(this.addmatch.valid){
+    this.uploadmatch();        
+    }
 
   }
 
-   uploadmatch(img,file){
+   uploadmatch(){ 
 
-  
     this.notifi.presentLoading(); 
-    const formData = new FormData();
-    formData.append('file', img, file); 
-    formData.append('_id', this._id);
-    formData.append('name', this.addmatch.value.name);
-    formData.append('location', this.addmatch.value.location);
-    formData.append('date', this.addmatch.value.date.split('T')[0]);
-    formData.append('stime', this.stime);
-    formData.append('etime', this.etime);
-    formData.append('players', this.addmatch.value.players);
-    formData.append('team1', this.addmatch.value.team1);
-    formData.append('team2', this.addmatch.value.team2);
-    formData.append('request_match', '0');
-    formData.append('fullday', '0');
 
-  
-     this.apiservice.post('addmatch/'+this._id+'/'+this.stime+'/'+this.etime+'/'+this.addmatch.value.date.split('T')[0],formData,'').subscribe((result) => {  
+    var reqData= {
+      _id:  this._id,
+      name: this.addmatch.value.name,
+      location: this.addmatch.value.location,
+      date:  this.addmatch.value.date.split('T')[0],
+      stime: this.stime,
+      etime: this.etime,
+      players: Number(this.addmatch.value.type)*2,
+      team1_name:  this.errors.indexOf(this.team1_name)==-1 ? this.team1_name : 'Team 1',
+      team2_name:  this.errors.indexOf(this.team2_name)==-1 ? this.team2_name : 'Team 2',
+      request_match: '0',
+      fullday: '0',
+      team1_player_ids: this.team1_player_ids.length!=0 ? this.team1_player_ids : [],
+      team2_player_ids: this.team2_player_ids.length!=0 ? this.team2_player_ids : [],
+      team1_team_id: this.team1_team_id,
+      team2_team_id: this.team2_team_id,
+      team_2_type: this.team_2_type,
+      team_1_type: this.team_1_type,
+      gender: this.addmatch.value.gender,
+
+    }
+
+     this.apiservice.post('addmatch',reqData,'').subscribe((result) => {  
        this.notifi.stopLoading();              
        this.response=result;
    if(this.response.status == 1){
-    this.notifi.presentToast(this.response.msg,'success');  
     this.is_submit=false;
     this.addmatch.reset();   
     this.imgpath=''; 
+    this.presentAlert('Success', 'Your match has been posted');
+    this.router.navigate(['/tabs/tabs/home']);
  
               } else if(this.response.status == 3){
                 this.notifi.presentToast(this.response.msg,'danger');  
@@ -317,17 +312,25 @@ takePicture(sourceType: PictureSourceType) {
     if(type==1){
       this.reqData = {
         team:team,
-        player_ids: this.team1_player_ids,
-        team_id: this.team1_team_id,
-        type: 1
+        player_ids: this.team2_player_ids,
+        team_id: this.team2_team_id,
+        selected_player_ids: this.team1_player_ids,
+        selected_team_id: this.team1_team_id,
+        type: 1,
+        limit: this.addmatch.value.type,
+
+
        }
 
     }else{
       this.reqData = {
         team:team,
-        player_ids: this.team2_player_ids,
-        team_id: this.team2_team_id,
-        type: 2
+        player_ids: this.team1_player_ids,
+        team_id: this.team1_team_id,
+        selected_player_ids: this.team2_player_ids,
+        selected_team_id: this.team2_team_id,
+        type: 2,
+        limit: this.addmatch.value.type
        }
 
 
@@ -346,44 +349,56 @@ takePicture(sourceType: PictureSourceType) {
        console.log(detail)
 
        if(detail.data.team_type==1){
-
+                  
+                  this.team_1_type= detail.data.type;
                   this.btn1= detail.data.name;
+                  this.team1_name= detail.data.name;
+          
                   if(detail.data.type==1){
 
-                   
+                    this.team1_player_ids=[];
                     this.team1_team_id= detail.data.team_id
                   
                   }  else{
             
-                   
+                    this.team1_team_id= null;
                     this.team1_player_ids= detail.data.player_ids
                   
                   }
 
 
-       }else{  
-
+       }else if(detail.data.team_type==2){  
+                  this.team_2_type= detail.data.type;
                   this.btn2= detail.data.name;
+                  this.team2_name= detail.data.name;
                   if(detail.data.type==1){
 
-                     
+                      this.team2_player_ids=[];
                       this.team2_team_id= detail.data.team_id
                     
                     }  else{
               
-                      
+                      this.team2_team_id= null;
                       this.team2_player_ids= detail.data.player_ids
                     
                     }
-
-
-    }
+              }
 
     
  
      });
 
     return await modal.present();
+  }
+
+  async presentAlert(header, message) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 
 }

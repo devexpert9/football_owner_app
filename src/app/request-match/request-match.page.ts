@@ -4,7 +4,7 @@ import { File, FileEntry } from '@ionic-native/file/ngx';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
 import { FilePath } from '@ionic-native/file-path/ngx';
 import { ApiService } from '../services/api/api.service';
-import { Router } from '@angular/router';
+import { Router , ActivatedRoute} from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {NotiService } from '../services/noti/noti.service';
 import {config} from '../config'
@@ -13,9 +13,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var window: any; 
 import { ModalController } from '@ionic/angular';
 import { SelectFavComponent } from '../select-fav/select-fav.component';
-import {  } from '@ionic-native/in-app-browser/ngx';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
-import {ActivatedRoute} from '@angular/router';
+import { SelectTeamPage } from "../select-team/select-team.page";
+import { AlertController } from '@ionic/angular';
 @Component({
   selector: 'app-request-match',
   templateUrl: './request-match.page.html',
@@ -23,7 +23,7 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class RequestMatchPage implements OnInit {
   public win: any = window; 
-  title="Add Match";
+  title="Requested Match";
   addmatch:FormGroup;
   is_submit:any;InAppBrowser
   response:any;
@@ -36,7 +36,23 @@ export class RequestMatchPage implements OnInit {
   etime:any;
   stripe_id:boolean=false;
   alldata:any;
+  btn1:any='Team 1';
+  btn2:any='Team 2';
+  team1_player_ids:any=[];
+  team2_player_ids:any=[];
+  team1_team_id:any;
+  team2_team_id:any;
+  reqData:any;
+  limit:any;
+  team1_name:any='Team 1';
+  team2_name:any='Team 2';
+  team_1_type:any=0;
+  team_2_type:any=0;
   fullday:any;
+  request_id:any;
+  player_ids: any;
+  team_id: any;
+  team_info : any;
   r_id:any;
   player_id:any;
   constructor(public modalController: ModalController,
@@ -54,41 +70,48 @@ export class RequestMatchPage implements OnInit {
     public apiservice:ApiService,
     public notifi:NotiService,
     public sanitizer:DomSanitizer,
-    private iab: InAppBrowser ,
-    private ActivatedRoute:ActivatedRoute
+    private iab: InAppBrowser,
+    public alertController: AlertController,
+    public ActivatedRoute:ActivatedRoute 
     ) {
-		this.ActivatedRoute.params.subscribe(params => {
-		this.date = params['date']; 
-		this.stime = params['stime']; 
-		this.etime = params['etime']; 
-		this.fullday = params['fullday'];
-		this.r_id = params['r_id'];
-    this.player_id = params['player_id'];
-		 this.makeform();
-		 console.log(this.fullday);
-		       if(this.fullday=='true'){
-		this.addmatch.patchValue({
-		date:this.date,
-		etime:'23:59',
-		stime:'01:00'
-		});
 
-      }else if(this.fullday=='false'){
-      this.addmatch.patchValue({
-		date:this.date,
-		etime:this.etime,
-		stime:this.stime
-		});
-
-      }
-
-		});
-       
+      this.ActivatedRoute.params.subscribe(params => {
       
+              this.team_id = params['team_id']; 
+              this.date = params['date']; 
+              this.stime = params['stime']; 
+              this.etime = params['etime']; 
+              this.fullday = params['fullday'];
+              this.request_id = params['r_id'];
+              this.player_id = params['player_id'];
+              this.player_ids = JSON.parse(params['players_ids']);
+              
+              this.makeform();
+              console.log('aaaaa');
+              console.log(params['player_ids']);
+         
+               if(this.fullday=='true'){
+                    this.addmatch.patchValue({
+                    date:this.date,
+                    etime:'23:59',
+                    stime:'01:00'
+                });
+    
+          }else if(this.fullday=='false'){
+          this.addmatch.patchValue({
+        date:this.date,
+        etime:this.etime,
+        stime:this.stime
+        });
+    
+          }
+    
+        });
 
- 
+       
 
-
+         this.date= new Date().toISOString();
+         this.makeform();
 
   }
 
@@ -96,20 +119,13 @@ export class RequestMatchPage implements OnInit {
   }
   ionViewDidEnter(){
     this.stripe_id = false;
+    this.getTeamInfo();
     this.alldata= JSON.parse(localStorage.getItem('user'));    
      
       if(this.errors.indexOf(this.alldata.stripe_id)==-1){
         this.stripe_id = true;
 
       }
-
-     
-
-
-
-     
-
- 
       
   }
 
@@ -117,13 +133,11 @@ export class RequestMatchPage implements OnInit {
     this.addmatch= this.formBuilder.group({
          name:['',Validators.compose([Validators.required])],
          location:['',Validators.compose([Validators.required])],
-         date:['',Validators.compose([Validators.required])],
-         stime:['', Validators.compose([Validators.required])],
-         etime:['', Validators.compose([Validators.required])],
-         players:['',Validators.compose([Validators.required])],
-         team1:['',Validators.compose([Validators.required])],
-         team2:['',Validators.compose([Validators.required])]
-        
+         date:[this.date, Validators.compose([Validators.required])],
+         stime:[this.stime, Validators.compose([Validators.required])],
+         etime:[this.stime, Validators.compose([Validators.required])],
+         type:['5',Validators.compose([Validators.required])],
+         gender:[null,Validators.compose([Validators.required])]
        
     });
   }
@@ -131,13 +145,21 @@ export class RequestMatchPage implements OnInit {
     const modal = await this.modalController.create({
       component: SelectFavComponent
     });
+
+    modal.onDidDismiss().then((detail) => {
+      console.log(detail)
+
+       if(detail.data==1){
+        console.log(detail);
+       }
+ 
+     });
+
     return await modal.present();
   }
 
-
-
   async selectImage() {
-     this.imgpath='';
+    this.imgpath='';
     const actionSheet = await this.actionSheetController.create({
     header: "Select Image source",
     mode:"ios",
@@ -193,80 +215,60 @@ takePicture(sourceType: PictureSourceType) {
 
   addmatchnow(){
    
- 
    this.is_submit=true;  
 
-   if(this.errors.indexOf(this.imgpath)==-1 && this.addmatch.valid){
-    this.file.resolveLocalFilesystemUrl(this.imgpath)
-    .then(entry => {
-        ( < FileEntry > entry).file(file => {
-          console.log('read file');
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            console.log('onloadend');
-            const imgBlob = new Blob([reader.result], {
-              type: file.type
-          });
-          this.uploadmatch(imgBlob,file.name);           
-        }
-        reader.readAsArrayBuffer(file);
-
-        })
-    })
-    .catch(err => {
-        this.notifi.presentToast('Error while reading file.','danger');
-    });     
-  }else{
-    this.covererr=true;
-  } 
+   if(this.addmatch.valid){
+    this.uploadmatch();        
+    }
 
   }
 
-   uploadmatch(img,file){
+   uploadmatch(){ 
 
-  
-    this.notifi.presentLoading(); 
-    const formData = new FormData();
-    formData.append('file', img, file); 
-    formData.append('_id', this._id);
-    formData.append('name', this.addmatch.value.name);
-    formData.append('location', this.addmatch.value.location);
-    formData.append('date', this.date);
-    formData.append('stime', this.stime);
-    formData.append('etime', this.etime);
-    formData.append('players', this.addmatch.value.players);
-    formData.append('team1', this.addmatch.value.team1);
-    formData.append('team2', this.addmatch.value.team2);
-    formData.append('r_id', this.r_id);
-    formData.append('player_id', this.player_id);
+    // this.notifi.presentLoading(); 
+    this.notifi.presentLoading();
+    var reqData= {
+      _id:  this._id,
+      name: this.addmatch.value.name,
+      location: this.addmatch.value.location,
+      date:  this.addmatch.value.date,
+      stime: this.stime,
+      etime: this.etime,
+      players: Number(this.addmatch.value.type)*2,
+      team1_name:  this.errors.indexOf(this.team1_name)==-1 ? this.team1_name : 'Team 1',
+      team2_name:  this.errors.indexOf(this.team2_name)==-1 ? this.team2_name : 'Team 2',
+      request_match: '1',
+      fullday: this.fullday ==true ? '1' :'0',
+      team1_player_ids: this.player_ids.length!=0 ? this.player_ids : [],
+      team2_player_ids: this.team2_player_ids.length!=0 ? this.team2_player_ids : [],
+      team1_team_id: this.team1_team_id,
+      team2_team_id: this.team2_team_id,
+      team_2_type: this.team_2_type,
+      team_1_type: this.team_1_type,
+      gender: this.addmatch.value.gender,
+      r_id: this.request_id,
+      player_id : this.player_id
 
-	formData.append('request_match', '1');
-
-	if(this.fullday=='true') {
-		formData.append('fullday', '1');
-	}else{
-
-		formData.append('fullday', '0');
-	}
-	
-    
-  
-     this.apiservice.post('addmatch/'+this._id+'/'+this.stime+'/'+this.etime+'/'+this.addmatch.value.date.split('T')[0],formData,'').subscribe((result) => {  
+    }
+   
+     this.apiservice.post('addmatch',reqData,'').subscribe((result) => {  
        this.notifi.stopLoading();              
        this.response=result;
    if(this.response.status == 1){
-
-    this.notifi.presentToast(this.response.msg,'success'); 
     this.is_submit=false;
     this.addmatch.reset();   
     this.imgpath=''; 
-    this.router.navigate(['/field-requests']); 
+    this.presentAlert('Success', 'Your match has been posted');
+    this.router.navigate(['tabs/tabs/home']);
  
               } else if(this.response.status == 3){
                 this.notifi.presentToast(this.response.msg,'danger');  
               
+               } else if(this.response.status == 4){
+                this.notifi.presentToast(this.response.msg,'danger');  
+              
                }
-                          else{
+                else{
                 this.notifi.presentToast(this.response.msg,'danger');  
 
               }
@@ -321,12 +323,107 @@ takePicture(sourceType: PictureSourceType) {
 });
 
 
+  }
 
-// browser.on('loadstop').subscribe(event => {
-//    browser.insertCSS({ code: "body{color: red;" });
-// });
 
-// browser.close();
+  async presentModal2(team, type) {
+
+    this.reqData = {
+      team : this.team2_name,
+      player_ids: this.player_ids,
+      team_id: this.team_id,
+      selected_player_ids: this.team2_player_ids,
+      selected_team_id: this.team2_team_id,
+      type: 2,
+      limit: this.addmatch.value.type
+     }
+  
+
+    const modal = await this.modalController.create({
+      component: SelectTeamPage,
+      componentProps: this.reqData
+
+    });
+
+
+
+    modal.onDidDismiss().then((detail) => {
+       console.log(detail)
+
+       if(detail.data.team_type==1){
+                  
+                  this.team_1_type= detail.data.type;
+                  this.btn1= detail.data.name;
+                  this.team1_name= detail.data.name;
+          
+                  if(detail.data.type==1){
+
+                    this.team1_player_ids=[];
+                    this.team1_team_id= detail.data.team_id
+                  
+                  }  else{
+            
+                    this.team1_team_id= null;
+                    this.team1_player_ids= detail.data.player_ids
+                  
+                  }
+
+
+       }else if(detail.data.team_type==2){  
+                  this.team_2_type= detail.data.type;
+                  this.btn2= detail.data.name;
+                  this.team2_name= detail.data.name;
+                  if(detail.data.type==1){
+
+                      this.team2_player_ids=[];
+                      this.team2_team_id= detail.data.team_id
+                    
+                    }  else{
+              
+                      this.team2_team_id= null;
+                      this.team2_player_ids= detail.data.player_ids
+                    
+                    }
+              }
+
+    
+ 
+     });
+
+    return await modal.present();
+  }
+
+  async presentAlert(header, message) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  getTeamInfo(){
+
+      this.notifi.presentLoading();
+      this.apiservice.post('getTemInfo',{_id : this.team_id},'').subscribe((result) => {  
+      this.notifi.stopLoading();              
+      var res;
+      res = result;
+      console.log(this.response)
+      if(res.status==1){
+        this.team_info = res.data;
+     
+      }else{
+       this.notifi.presentToast('Internal server error','danger');
+     }
+ 
+ },
+ err => {
+      this.notifi.stopLoading();
+      this.notifi.presentToast('Error while updating profile  ,Please try later','danger');
+ });
+
 
   }
 

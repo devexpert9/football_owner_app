@@ -28,7 +28,15 @@
 
 						<ion-col size="6" *ngFor="let upcoming of upcominglist">
 							<div class="box-imgs-sa small-2-box">
-								<img src="{{url}}{{upcoming.cover}}" class="main-img" routerLink="/upcoming-matchdetails/{{upcoming._id}}">
+
+								<img src="assets/images/woman.png"  class="main-img"  routerLink="/upcoming-matchdetails/{{upcoming._id}}" *ngIf="upcoming.gender=='f'">
+
+								<img src="assets/images/centre.png" class="main-img"  routerLink="/upcoming-matchdetails/{{upcoming._id}}" *ngIf="upcoming.gender=='coed'">
+				
+								<img src="assets/images/ma.png" class="main-img"    routerLink="/upcoming-matchdetails/{{upcoming._id}}" *ngIf="upcoming.gender=='m'">
+
+								<!-- <img src="{{url}}{{upcoming.cover}}" class="main-img" routerLink="/upcoming-matchdetails/{{upcoming._id}}"> -->
+
 								<span class="bagd-joins"> {{upcoming.status}} Joined </span>
 								<div class="cont-sts">
 									<h4 class="name-h" routerLink="/upcoming-matchdetails/{{upcoming._id}}">{{upcoming.name}}  </h4>
@@ -53,8 +61,13 @@
 									<div class="box-imgs-sa small-2-box">
 											<!-- <ion-button size="small" class="ad_results">Add Results</ion-button> -->
 											
-										<img src="{{url}}{{previousmatch.cover}}" class="main-img" routerLink="/previousmatch-matchdetails/{{previousmatch._id}}">
-										
+										<!-- <img src="{{url}}{{previousmatch.cover}}" class="main-img" routerLink="/previousmatch-matchdetails/{{previousmatch._id}}"> -->
+
+										<img src="assets/images/woman.png" class="main-img"  routerLink="/previousmatch-matchdetails/{{previousmatch._id}}" *ngIf="previousmatch.gender=='f'">
+
+										<img src="assets/images/centre.png" class="main-img"  routerLink="/previousmatch-matchdetails/{{previousmatch._id}}" *ngIf="previousmatch.gender=='coed'">
+						
+										<img src="assets/images/ma.png" class="main-img"    routerLink="/previousmatch-matchdetails/{{previousmatch._id}}" *ngIf="previousmatch.gender=='m'">
 									
 										<div class="cont-sts">
 											<h4 class="name-h" routerLink="/previousmatch-matchdetails/{{previousmatch._id}}">{{previousmatch.name}}  </h4>

@@ -31,9 +31,9 @@
               <ion-icon icon-left  slot="start" name="pin"></ion-icon>
               <ion-label position="stacked">Address</ion-label>
             
-     </ion-item>
-             <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"></ng4geo-autocomplete>
+              <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"></ng4geo-autocomplete>
 
+     </ion-item>
       <div *ngIf="address_error && is_submit" class="valid">
           Please enter address
       </div> 

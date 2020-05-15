@@ -59,7 +59,7 @@ export class HomePage {
   url:any=config.API_URL+'server/data/match/';
   is_submit:any=false;
   filevar:any;
-  _id:any;
+  _id:any=localStorage.getItem('_id');;
   matches:any;
   rate:any;
   onRateChange:any;
@@ -113,14 +113,17 @@ export class HomePage {
   ngOnInit() {
   }
    todayMatches(){
-      this.apiservice.post('todayMatches','','').subscribe((result) => {  
+    this.matchlist=[];
+      this.apiservice.post('ownerTodayMatches',{_id: this._id},'').subscribe((result) => {  
       this.response1_came=true;  
-      this.notifi.stopLoading();              
-      this.response=result;
-  if(this.response.status == 1){     
-      // this.notifi.presentToast(this.response.msg,'success'); 
-      this.matchlist=this.response.data;
-      // console.log(this.matchlist);
+      this.notifi.stopLoading();   
+      var res;
+      res = result;           
+      
+  if(res.status == 1){     
+   
+      this.matchlist=res.data;
+      
      
   }
   else{
@@ -138,14 +141,15 @@ err => {
 
 
    upcomingMatches(){
-    this.apiservice.post('upcomingMatches','','').subscribe((result) => {  
+    this.upcominglist=[];
+    this.apiservice.post('ownerUpcomingMatches',{_id: this._id},'').subscribe((result) => {  
        this.response2_came=true;  
       this.notifi.stopLoading();              
-      this.upcomingres=result;
-  if(this.upcomingres.status == 1){     
-      // this.notifi.presentToast(this.response.msg,'success'); 
-      // console.log(this.upcomingres.data);
-      this.upcominglist=this.upcomingres.data;
+       var res;
+       res = result;
+  if(res.status == 1){     
+     
+      this.upcominglist = res.data;
    
      
   }
@@ -163,39 +167,58 @@ err => {
    }
 
    searchmatch(ev){
-     if(this.errors.indexOf(ev.target.value)==-1){
-      this.keyword=ev.target.value;
-      this.searching=true;
-      this.apiservice.post('searchhome',{keyword:ev.target.value},'').subscribe((result) => {  
-        this.notifi.stopLoading();              
-        this.searchres=result;
-    if(this.searchres.status == 1){     
-     
-      this.upcominglist= this.searchres.data;
-      if(this.upcominglist.length==0){
-        this.noresults= true;
+   
+    if(ev.target.value.trim()!=''){
+      if(this.errors.indexOf(ev.target.value)==-1){
+        console.log('A');
+       this.keyword=ev.target.value;
+       this.searching=true;
+       this.apiservice.post('ownersearchMatches',{keyword:ev.target.value,_id: this._id},'').subscribe((result) => {  
+         this.notifi.stopLoading();              
+         this.searchres=result;
+     if(this.searchres.status == 1){   
+       console.log('B');  
+      
+       this.upcominglist= this.searchres.data;
+       if(this.upcominglist.length==0){
+         console.log('c');  
+         this.noresults= true;
+       }else{
+         this.noresults= false;
+       }
+       
+     }
+     else{
+       this.noresults= true;
+       this.upcominglist= []; 
+       
+     }
+   },
+   err => {
+         this.notifi.stopLoading();
+         this.notifi.presentToast('Internal server error','danger');
+   });
+ 
       }else{
-        this.noresults= false;
+     
+       this.noresults= false;
+       this.searching=false;
+       this.todayMatches(); 
+       this.upcomingMatches(); 
+ 
       }
-      
-    }
-    else{
-      this.noresults= true;
-      this.upcominglist= []; 
-      
-    }
-  },
-  err => {
-        this.notifi.stopLoading();
-        this.notifi.presentToast('Internal server error','danger');
-  });
 
-     }else{
+
+    }else{
+
       this.noresults= false;
       this.searching=false;
-      this.upcomingMatches();
+      this.todayMatches(); 
+      this.upcomingMatches(); 
 
-     }
+
+    }
+  
                 
          
    }

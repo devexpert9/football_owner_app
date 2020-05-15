@@ -8,7 +8,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var window: any; 
 import { ModalController } from '@ionic/angular';
 import { InvitePlayerComponent } from "../invite-player/invite-player.component";
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 @Component({
   selector: 'app-player-list',
   templateUrl: './player-list.page.html',
@@ -49,33 +48,26 @@ export class PlayerListPage implements OnInit {
 
   getPlayers(){
     this.notifi.presentLoading();
-    this.geolocation.getCurrentPosition().then((resp) => { 
-      this.apiservice.post('getnearbyUsers',{lat:resp.coords.latitude,lng:resp.coords.longitude,miles:50, _id: this._id},'').subscribe((result) => {  
-        this.nolocation=false;      
-        this.notifi.stopLoading();              
-        this.playerres=result;
-              if(this.playerres.status == 1){     
-                  console.log(this.playerres);
-                  this.noplayerlist=false;
+    this.apiservice.post('getnearbyUsers',{_id: this._id},'').subscribe((result) => {  
+      this.nolocation=false;      
+      this.notifi.stopLoading();              
+      this.playerres=result;
+            if(this.playerres.status == 1){     
+                console.log(this.playerres);
+                this.noplayerlist=false;
+              
+                this.playerlist=this.playerres.data;   
+            }
+            else{
+              this.noplayerlist=true;
+              this.playerlist=[];
                 
-                  this.playerlist=this.playerres.data;   
-              }
-              else{
-                this.noplayerlist=true;
-                this.playerlist=[];
-                  
-              }
-  },
-  err => {
-        this.notifi.stopLoading();
-        this.notifi.presentToast('Internal server error. Try again','danger');
-  });
-
-     }).catch((error) => {
+            }
+},
+err => {
       this.notifi.stopLoading();
-      this.nolocation=true;
-      console.log(error)
-     });
+      this.notifi.presentToast('Internal server error. Try again','danger');
+});
  
 
    }
