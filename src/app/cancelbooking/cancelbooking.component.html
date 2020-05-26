@@ -1,0 +1,19 @@
+
+<ion-header>
+  <ion-toolbar heading_ttl>
+    <ion-title>Cancel Booking</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content bg-dark padding>
+   <div class="cnl_booking">
+     <h3>Let us know the reason to cancel your <span>Booking</span></h3>
+     <div class="msg_box">
+      <ion-textarea rows="4" cols="20"></ion-textarea>
+     </div>
+     <div class="modal_btn">
+        <ion-buttons>Submit</ion-buttons>
+        <ion-buttons (click)="myDismiss()" dismiss>Cancel</ion-buttons>
+     </div>
+   </div>
+</ion-content>

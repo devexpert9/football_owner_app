@@ -1,0 +1,79 @@
+<ion-header ion_page_header>
+  <ion-toolbar>
+
+    <ion-title>Select Players</ion-title>
+    <ion-buttons slot="end">
+      <ion-icon name="close" close_btn (click)="myDismiss()"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content bg-dark>
+	<div mainDetails *ngIf="response_came">
+		<div players>      
+      <ion-item no-padding lines="none" >
+        <ion-searchbar placeholder="Search Player" (keyup)="search($event)"></ion-searchbar>
+      </ion-item>
+      <p class="main-ttls" *ngIf="noresults"  class="searcherror"> No results found for {{keyword}} </p>
+ 
+  <ion-item no-padding lines="none" *ngFor="let item of onlyplayers">
+    <ion-avatar slot="start">
+        <img *ngIf="errors.indexOf(item?.pic)>=0" src="assets/images/default-avatar.jpg">
+        <img  *ngIf="errors.indexOf(item?.pic)==-1" src="{{purl+item?.pic}}">
+    </ion-avatar>
+    <ion-label  no-lines>
+      <h2><span routerLink="/player-detail">
+        {{item?.fname[0].toUpperCase()+item?.fname.slice(1)}} {{item?.lname[0].toUpperCase()+item?.lname.slice(1)}}
+      </span>  <ion-checkbox color="primary" (click)="FieldsChange($event,item._id)"></ion-checkbox></h2>
+      <div style="margin-left: 3px;">
+			
+        <ngx-stars  [size]="1" [maxStars]="5" [readonly]="true" [initialStars]="item?.points < 10 ? 0 : ((item?.points >= 10 && item?.points < 20) ? 1 : ((item?.points >= 20 && item?.points < 30) ? 2 : (item?.points >= 30 && item?.points < 40) ? 3 : (item?.points >= 40 && item?.points < 50) ? 4 : 5))"></ngx-stars>
+    
+      </div>
+      <div position>
+
+        <h5><i class="fa fa-street-view" aria-hidden="true"></i> <span>{{item.position}}</span></h5>
+            <h5><i class="fa fa-futbol-o" aria-hidden="true"></i> <span>{{item.goals}}</span></h5>
+            <h5><i class="fa fa-map-marker" aria-hidden="true"></i> <span>{{item.city}}</span></h5>
+      </div>
+    </ion-label>
+</ion-item>
+
+<div *ngIf="onlyplayers.length==0" style="margin-left: 115px;
+margin-top: 25px;" class="notfound">
+       No players available
+</div>
+
+<ion-item lines="none">
+  <ion-button btn_done (click)="myDismiss()" *ngIf="onlyplayers.length>0">Save</ion-button >
+    <ion-button btn_done (click)="myDismiss()" *ngIf="onlyplayers.length==0">Close</ion-button >
+</ion-item>
+		</div>		
+	</div>
+
+    <!-- ============skeleton=========== -->
+
+  <div *ngIf="!response_came">
+      <div class="ion-padding custom-skeleton">
+          <ion-item style="--background: #535353;background: #535353;" *ngFor="let item of skeleton" >
+              <ion-avatar slot="start">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+              <ion-label>
+                <h3>
+                <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </h3>
+                <p>
+                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                </p>
+                <p>
+                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                </p>
+              </ion-label>
+              </ion-item>
+      </div>
+      
+    
+      </div>
+
+</ion-content>

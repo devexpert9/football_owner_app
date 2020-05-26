@@ -1,0 +1,24 @@
+
+<ion-header>
+  <ion-toolbar heading_ttl>
+    <ion-title>Add Rating</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content bg-dark padding>
+   <div class="cnl_booking">
+    <ion-buttons  (click)="myDismiss()" close_mdl><ion-icon ios="ios-close" md="md-close"></ion-icon></ion-buttons>
+     <h3>Add your rating here </h3>
+		<ul class="ratning-all">
+			<li> <ion-icon name="star"></ion-icon> </li>
+			<li> <ion-icon name="star"></ion-icon> </li>
+			<li> <ion-icon name="star"></ion-icon> </li>
+			<li> <ion-icon name="star-half"></ion-icon> </li>
+			<li> <ion-icon name="star-outline"></ion-icon> </li>
+		</ul>
+     <div class="modal_btn">
+        <ion-buttons>Submit</ion-buttons>
+        <ion-buttons (click)="myDismiss()" dismiss>Cancel</ion-buttons>
+     </div>
+   </div>
+</ion-content>

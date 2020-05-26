@@ -1,0 +1,46 @@
+<app-header [title]="title"></app-header>
+
+
+<ion-content bg-dark padding>
+
+
+<ion-row plr_prt mt-2>
+	<ion-col size-md="12">
+		<h4>Transactions Made </h4>
+	</ion-col>
+</ion-row>
+<ion-row plr_prt_m plr_hdr>
+	<ion-col size="3">Sr no.</ion-col>
+	<ion-col size="2">Id</ion-col>
+	<ion-col size="2">Name</ion-col>
+	<ion-col size="3">Date</ion-col>
+	
+	<ion-col size="2">Amount</ion-col>
+</ion-row>
+<ion-row plr_prt_m *ngFor="let item of transactions; let i= index">
+	<ion-col size="3">{{i+1}}</ion-col>
+	<ion-col size="2">{{item?.payId}}</ion-col>
+	<ion-col size="2" *ngIf="item?.type==1">Match joined</ion-col>
+	<ion-col size="2" *ngIf="item?.type==3">Field Request</ion-col>
+	<ion-col size="3" date_col>{{item?.createdAt| date : 'd MMM, y' }}
+		<span>{{item?.date| date : 'shortTime' }}</span>
+	</ion-col>
+
+	<ion-col size="2">${{item?.amount}}</ion-col>
+</ion-row>
+
+<p *ngIf="transactions?.length==0  && response_came" class="notfound">No record found</p>
+
+<!-- ======skeleton======= -->
+
+<div *ngIf="!response_came">
+		<div class="ion-padding custom-skeleton" *ngFor="let item of skeleton">
+		  <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+		  <ion-skeleton-text animated></ion-skeleton-text>
+		  <ion-skeleton-text animated style="width: 88%"></ion-skeleton-text>
+		  <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+		  <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+		</div>   
+</div>
+
+</ion-content>

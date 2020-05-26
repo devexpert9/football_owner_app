@@ -1,0 +1,170 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+[ion_page_header]{
+	ion-title{
+        padding: inherit;
+        text-align: center;
+	}
+	ion-buttons{
+		ion-menu-button{
+			position:relative;
+			[alert]{
+				position: absolute;
+				width: 10px;
+				height: 10px;
+				background:#ff5722;
+				border-radius: 50px; 
+				top: 10px;
+				right: 10px;
+			}
+			ion-icon{
+				color:#fff;
+			}
+		}
+	}
+}
+
+[app_ad]{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    right: 0;
+	z-index: 999;
+    img{
+        width:100%;
+    }
+    [close_btn]{
+        position: absolute;
+        background: #33333387;
+        color: #fff;
+        right: 5px;
+    }
+}
+
+
+
+.ion-slider .swiper-pagination{
+	position: relative;
+    bottom: 0;
+    margin-top: 10px;
+}
+
+.ion-slider  .swiper-pagination-bullet{
+	background:#fff !important;
+	opacity:1;
+}
+
+.ion-slider span.swiper-pagination-bullet.swiper-pagination-bullet-active{
+	background:#fd93fb !important;
+}
+
+.notfound{
+color:grey;
+margin-left: 96px;
+}
+
+.searcherror{
+	
+	margin-top: 10px;
+	color:grey;
+}
+
+.loading-wrapper.sc-ion-loading-md{
+	background:none !important;
+	box-shadow:none !important;
+}
+
+.spinner-bubbles.sc-ion-loading-md, .spinner-circles.sc-ion-loading-md, .spinner-crescent.sc-ion-loading-md, .spinner-dots.sc-ion-loading-md, .spinner-lines.sc-ion-loading-md, .spinner-lines-small.sc-ion-loading-md {
+color:var(--ion-color-primary)!important;
+width:50px!important;
+height:50px!important
+}
+
+ng4geo-autocomplete input#search_places {
+    border-radius: 0;
+    height: 42px;
+    font-size: 14px;
+    padding: 0px 60px 0px 12px;
+    border-top: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: none;
+    margin-bottom: 15px;
+  /*  max-width:250px;*/
+    max-width: 100%;
+        color: #fff;
+
+}
+ng4geo-autocomplete button {
+  display: none;
+}
+ng4geo-autocomplete button.search-icon i.search-default-icon {
+    height: 16px!important;
+    width: 16px!important;
+}
+input:focus , textarea:focus , select:focus , ion-datetime:focus , button:focus, ion-item:focus {
+    outline: none;
+}
+/*Address Field Css Start*/
+[addressproperty]
+{border-bottom: 1px solid #656565;display: flex;
+ion-label
+{
+font-size: 11px;
+    color: #fff;
+}
+ion-icon
+{min-width:30px;
+font-size: 30px;
+    color: #fd93fb;
+    margin-right: 10px;
+}
+[addressleft]
+{width: 100%!important;
+  ng4geo-autocomplete
+  {    width: 100%!important;
+  input
+  {font-size: 14px;
+  height:30px!important;
+  width: 100%!important;
+    padding: 0px!important;
+    border: none!important;
+    margin: 0!important;
+  }
+  }
+}
+}
+/*Address Field Css Ends*/
+ngx-stars .stars-line span.star {
+    background: #fd93fb!important;
+	}
+ngx-stars .stars-line span.star.zero-star
+{
+display:none!important;
+}

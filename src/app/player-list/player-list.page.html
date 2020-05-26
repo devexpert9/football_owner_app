@@ -1,0 +1,39 @@
+<app-header [title]="title"></app-header>
+
+<ion-content bg-dark>
+	<div mainDetails>
+		<div players>
+      <h4>Players who follow you</h4>
+      
+      <!-- <p *ngIf="nolocation">Please enable location and click retry</p> -->
+      <p *ngIf="nolocation" style="color:grey">Please enable phone location and click retry</p>
+      <button (click)="getPlayers()" *ngIf="nolocation">Retry</button>
+
+			<ion-item no-padding lines="none" *ngFor="let player of playerlist">
+        <ion-avatar slot="start">
+          <img *ngIf="errors.indexOf(player.pic)>=0" src="assets/images/default-avatar.jpg">
+          <img  *ngIf="errors.indexOf(player.pic)==-1" src="{{url+player.pic}}">
+        </ion-avatar>
+        <ion-label  no-lines>
+          <!-- <h2><span routerLink="/player-detail">{{player.fname[0].toUpperCase()+player.fname.slice(1)}} {{player.lname[0].toUpperCase()+player.lname.slice(1)}} </span><ion-button (click)="presentModal()">Invite</ion-button></h2> -->
+          <h2 routerLink="/player-detail/{{player._id}}" routerLinkActive="router-link-active" ><span>{{player.fname[0].toUpperCase()+player.fname.slice(1)}} {{player.lname[0].toUpperCase()+player.lname.slice(1)}} </span></h2>
+          <div style="margin-left: 3px;">
+			
+						<ngx-stars  [size]="1" [maxStars]="5" [readonly]="true" [initialStars]="player?.points < 10 ? 0 : ((player?.points >= 10 && player?.points < 20) ? 1 : ((player?.points >= 20 && player?.points < 30) ? 2 : (player?.points >= 30 && player?.points < 40) ? 3 : (player?.points >= 40 && player?.points < 50) ? 4 : 5))"></ngx-stars>
+				
+					</div>
+          <div position>
+            <h5><i class="fa fa-street-view" aria-hidden="true"></i>  <span>{{player.position}}</span></h5>
+            <h5><i class="fa fa-futbol-o" aria-hidden="true"></i>  <span>{{player.goals}}</span></h5>
+            <h5 *ngIf="errors.indexOf(player.city)==-1"><i class="fa fa-map-marker" aria-hidden="true"></i> <span>{{player.city}}</span></h5>
+          </div>
+        </ion-label>
+      </ion-item>
+
+
+
+
+		</div>		
+	</div>
+    <p  *ngIf="noplayerlist"  class="notfound">No players found</p>
+</ion-content>
