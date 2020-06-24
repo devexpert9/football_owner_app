@@ -224,3 +224,69 @@ ion-select.slect  {
 	color:red;
 	font-size: 12px
 }
+
+[addProperty]{
+	[UserDetails]{
+		background:none !important; 
+		padding:5px 0px 0px;
+		.img_select_box{
+			position:relative;
+			color:#fff;
+			label{
+				display: block;
+				background: #fd93fb;
+				padding: 6px 21px;
+				border-radius: 30px;
+			}
+			input{
+				display: none;
+			}
+		}
+		ion-button{
+			font-size: 12px;
+		}
+		ion-item{
+			font-size: 14px;
+			margin:0 0 10px;
+			--background:transparent;
+			--border-color: rgba(2255,255,255, .1);
+			[icon-left]{
+				font-size:30px;
+				color: #fd93fb;
+				margin-right: 10px;
+			}
+			ion-label{
+			width: 100%;
+			max-width: 100%;
+			color: #fff;
+			letter-spacing: 1.5px;	
+				span{
+					color: #fff;
+					font-size: 12px;
+					letter-spacing: 1.5px;
+					margin:0 0 5px;
+					display: block;
+				}
+			}
+			ion-input , ion-textarea
+			{
+			font-size: 14px;
+			color:#fff;
+			}
+			ion-button{
+				--box-shadow:none;
+				position: absolute;
+				right: 0;
+				top: 0;
+				font-size: 11px;
+			}
+			ion-toggle{
+				--box-shadow:none;
+				position: absolute;
+				right: 0;
+				top: 0;
+				font-size: 11px;
+			}
+		}
+	}
+}

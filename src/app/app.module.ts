@@ -24,6 +24,10 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { AlertController } from '@ionic/angular';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { NgxStarsModule } from 'ngx-stars';
+import { Toast } from '@ionic-native/toast/ngx';
+import { socket_config, social_config } from './config';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+const config: SocketIoConfig = { url: socket_config.SOCKET_URL, options: {} };
 @NgModule({
   declarations: [SelectTeamPage,AppComponent , SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
   entryComponents: [SelectTeamPage, SelectFavComponent , CancelbookingComponent , CancelmatchComponent, AddReviewComponent],
@@ -37,6 +41,7 @@ import { NgxStarsModule } from 'ngx-stars';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,  
+    SocketIoModule.forRoot(config)
   ],
   providers: [   
     StatusBar,
@@ -51,7 +56,8 @@ import { NgxStarsModule } from 'ngx-stars';
     FCM,
     Geolocation,
     InAppBrowser,
-    AlertController
+    AlertController,
+    Toast
     
   ],
   bootstrap: [AppComponent]

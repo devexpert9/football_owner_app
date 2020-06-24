@@ -35,7 +35,7 @@
 
 <ion-row plr_prt>
 	<ion-col size-md="12">
-		<h4>Participating Players <small>{{noOfPlayers}}/{{matchlist?.match.players}}</small> <a href="javascript:void(0);" (click)="presentModal()" class="invite-rt" *ngIf="noOfPlayers < matchlist?.match.players" >Invite Player </a> </h4>
+		<h4>Participating Players <small>{{noOfPlayers}}/{{matchlist?.match.players}}</small> <a href="javascript:void(0);" (click)="presentModal()" class="invite-rt" *ngIf="noOfPlayers < matchlist?.match.players && errors.indexOf(matchlist.match.team1_team_id) >=0 && errors.indexOf(matchlist.match.team2_team_id) >=0" >Invite Player </a> </h4>
 	</ion-col>
 </ion-row>
 
@@ -49,7 +49,7 @@
 	<ion-col size="2">Player</ion-col>
 	<ion-col size="5">Name</ion-col>
 	<ion-col size="3">Position</ion-col>
-	<ion-col size="2">Goals</ion-col>
+	<ion-col size="2">Message</ion-col>
 </ion-row>
 		
 
@@ -75,7 +75,7 @@
 					</div>
 					</ion-col>
 					<ion-col size="3">{{player?.position}}</ion-col>
-					<ion-col size="2">{{player?.goals}}</ion-col>
+					<ion-col size="2"><button (click)="msg_popup(player?.fname[0].toUpperCase()+player?.fname.slice(1)+' '+player?.lname[0].toUpperCase()+player?.lname.slice(1),player._id )" class="message">Message</button></ion-col>
 		
 					
 			</ion-row>
@@ -99,7 +99,7 @@
 	<ion-col size="2">Player</ion-col>
 	<ion-col size="5">Name</ion-col>
 	<ion-col size="3">Position</ion-col>
-	<ion-col size="2">Goals</ion-col>
+	<ion-col size="2">Message</ion-col>
 </ion-row> 
 		
 
@@ -124,7 +124,7 @@
 					</div>
 					</ion-col>
 					<ion-col size="3">{{player?.position}}</ion-col>
-					<ion-col size="2">{{player?.goals}}</ion-col>
+						<ion-col size="2"><button (click)="msg_popup(player?.fname[0].toUpperCase()+player?.fname.slice(1)+' '+player?.lname[0].toUpperCase()+player?.lname.slice(1),player._id )" class="message">Message</button></ion-col>
 		
 					
 			</ion-row>
@@ -144,7 +144,7 @@
 	<ion-col size="2">Player</ion-col>
 	<ion-col size="5">Name</ion-col>
 	<ion-col size="3">Position</ion-col>
-	<ion-col size="2">Goals</ion-col>
+	<ion-col size="2">Message</ion-col>
 </ion-row>
 		
 
@@ -169,7 +169,7 @@
 					</div>
 					</ion-col>
 					<ion-col size="3">{{player?.position}}</ion-col>
-					<ion-col size="2">{{player?.goals}}</ion-col>
+					<ion-col size="2"><button (click)="msg_popup(player?.fname[0].toUpperCase()+player?.fname.slice(1)+' '+player?.lname[0].toUpperCase()+player?.lname.slice(1),player._id )" class="message">Message</button></ion-col>
 		
 						
 			</ion-row>

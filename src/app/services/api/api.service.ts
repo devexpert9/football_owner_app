@@ -4,7 +4,7 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { ToastController} from '@ionic/angular';
 import { config} from '../../config';
-import { Http, RequestOptions} from '@angular/http';
+
 import 'rxjs/add/operator/map';
 import { map } from "rxjs/operators";
 import { HttpHeaders,HttpClient} from '@angular/common/http';
@@ -14,7 +14,7 @@ import { HttpHeaders,HttpClient} from '@angular/common/http';
 })
 export class ApiService {
   url:any = config.API_URL;
-  constructor(private Http:Http,private HttpClient:HttpClient) { }
+  constructor(private HttpClient:HttpClient) { }
 
   post(endpoint,data,headers){
     

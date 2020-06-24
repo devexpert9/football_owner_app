@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController, ModalController, LoadingController, Events } from '@ionic/angular';
+import { Toast } from '@ionic-native/toast/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -10,22 +11,30 @@ export class NotiService {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private events:Events,
+    private toast: Toast
   
              ) { }
 
   //============  start modals and loaders==============
   async presentToast(message,color) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      position: 'bottom',
-      color: color,
-      showCloseButton: true,
-      mode:"ios",
+    this.toast.show(message, '5000', 'center').subscribe(
+      toast => {
+        console.log(toast);
+      }
+    );
+    // const toast = await this.toastController.create({
+    //   message: message,
+    //   duration: 3000,
+    //   position: 'bottom',
+    //   color: color,
+    //   showCloseButton: true,
+    //   mode:"ios",
     
-    });
-    toast.present();
+    // });
+    // toast.present();
   }
+
+  
   
 async presentLoading() {
 this.loading = await this.loadingController.create({

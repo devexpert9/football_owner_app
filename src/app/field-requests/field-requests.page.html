@@ -23,8 +23,8 @@
 						</p>
 					</div>
 					<div class="btn-acct">
-						<a href="javascript:void(0);" class="accrot" (click)="actionOnFieldReq(key.request._id,1,i,key.request.payment_id,key.player._id,key.request.date,key.request.etime,key.request.stime,key.request.fullday, key.request.players_ids, key.request.team_id)"> <ion-icon name="checkmark"></ion-icon> </a>
-						<a href="javascript:void(0);" (click)="actionOnFieldReq(key.request._id,0,i,key.request.payment_id,key.player._id,key.request.date,key.request.etime,key.request.stime,key.request.fullday, key.request.players_ids, key.request.team_id)" class="reject"> <ion-icon name="close"></ion-icon> </a>
+						<a href="javascript:void(0);" class="accrot" (click)="actionOnFieldReq(key.request._id,1,i,key.request.payment_id,key.player._id,key.request.date,key.request.etime,key.request.stime,key.request.fullday, key.request.players_ids, key.request.team_id, key.request.duration)"> <ion-icon name="checkmark"></ion-icon> </a>
+						<a href="javascript:void(0);" (click)="actionOnFieldReq(key.request._id,0,i,key.request.payment_id,key.player._id,key.request.date,key.request.etime,key.request.stime,key.request.fullday, key.request.players_ids, key.request.team_id, key.request.duration)" class="reject"> <ion-icon name="close"></ion-icon> </a>
 					</div>
 				</ion-card>
 				<p *ngIf="norequest" class="notfound">No Requests Yet</p>

@@ -8,6 +8,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 declare var window: any; 
 import { ModalController } from '@ionic/angular';
 import { InvitePlayerComponent } from "../invite-player/invite-player.component";
+import { AlertController } from '@ionic/angular';
+import { Socket } from 'ngx-socket-io';
 @Component({
   selector: 'app-player-list',
   templateUrl: './player-list.page.html',
@@ -22,14 +24,18 @@ export class PlayerListPage implements OnInit {
   url:any=config.API_URL+'server/data/p_pics/';
   errors:any=['',null,undefined,'null','undefined'];
   _id:any=localStorage.getItem('_id');
+  myname : any;
+  mypic:any;
   constructor(
-    public modalController: ModalController,
-     public router: Router,
-    public actionSheetController: ActionSheetController, 
-    public events: Events, 	
-    public apiservice:ApiService,
-    public notifi:NotiService,
-    public sanitizer:DomSanitizer,
+        public modalController: ModalController,
+        public router: Router,
+        public actionSheetController: ActionSheetController, 
+        public events: Events, 	
+        public apiservice:ApiService,
+        public notifi:NotiService,
+        public sanitizer:DomSanitizer,
+        public alertController: AlertController,
+        private socket: Socket,
   
     ) {  }
 
@@ -73,6 +79,73 @@ err => {
  
 
    }
+
+   msg_popup(name, toId){
+      this. presentAlertPrompt(name, toId);
+  }
+
+
+
+  send_message(message, toId){
+  
+    this.apiservice.post('add_chat', {fromId: this._id, toId: toId, message : message},'').subscribe((res) => { 
+      var result;
+      result = res;
+      if(result.status == 1){
+        this.notifi.presentToast('Message sent','danger');
+        this.socket.connect();
+        this.socket.emit('send_message', {_id : result.data, fromId : this._id, message : message, toId : toId, createdAt : new Date() , user_name :  this.myname, user_image :  this.mypic});
+    
+      }
+    },
+    err => {
+      console.log(err)
+    });
+
+    }
+
+async presentAlertPrompt(name, toId) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Quick Message To '+name,
+      mode:'ios',
+      inputs: [
+        {
+          name: 'msg',
+          type: 'text',
+          placeholder: 'Type message...'
+        }
+      
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Send',
+          handler: (value) => {
+          
+            
+                  if(this.errors.indexOf(value.msg)==-1){
+                  this.send_message(value.msg, toId );
+                 
+            }else{
+              this.notifi.presentToast('Message was empty, not sent','danger');
+
+            }
+
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
 
 }

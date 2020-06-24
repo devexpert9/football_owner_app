@@ -33,7 +33,7 @@ const routes: Routes = [
           {
             path: '',
             loadChildren: () =>
-            import('../add-property/add-property.module').then(m => m.AddPropertyPageModule)
+            import('../my-profile//my-profile.module').then(m => m.MyProfilePageModule)
           }
         ]
       },

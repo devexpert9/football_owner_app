@@ -16,10 +16,10 @@
         </ion-select>
 
      </ion-item>
+
         <div *ngIf="!addmatch.controls.type.valid && is_submit" class="valid">
             Please select type
         </div>
-
 
         <ion-item no-padding>
           <ion-icon icon-left slot="start" name="business"></ion-icon>
@@ -36,16 +36,6 @@
               Please select gender
           </div>
         
-		 <ion-item no-padding>
-			  <ion-icon  icon-left slot="start" name="logo-slack"></ion-icon>
-	 		 <ion-label position="stacked">Location</ion-label>
-           <ion-input  formControlName="location"></ion-input>    
-      </ion-item>
-
-      <div *ngIf="!addmatch.controls.location.valid && is_submit" class="valid">
-          Please enter location
-      </div>
-    
         <ion-item no-padding>
           <ion-icon icon-left  slot="start" name="calendar"></ion-icon>
           <ion-label position="stacked">Date</ion-label>
@@ -66,48 +56,57 @@
         </ion-item>
 
         <ion-item no-padding *ngIf="!is_today">
-          <ion-icon icon-left  slot="start" name="clock"></ion-icon>
-          <ion-label position="stacked">Start Time</ion-label>
-          <ion-datetime field_clr display-format="HH-mm" picker-format="HH-mm" formControlName="stime" ></ion-datetime>
-
+            <ion-icon icon-left  slot="start" name="clock"></ion-icon>
+            <ion-label position="stacked">Start Time</ion-label>
+            <ion-datetime field_clr display-format="HH-mm" picker-format="HH-mm" formControlName="stime" ></ion-datetime>
+  
         </ion-item>
-
-
-        <div *ngIf="!addmatch.controls.stime.valid && is_submit" class="valid">
-            Please select start time
-        </div>
+  
+  
+          <div *ngIf="!addmatch.controls.stime.valid && is_submit" class="valid">
+              Please select start time
+          </div>
 
 
         <ion-item no-padding>
-          <ion-icon icon-left  slot="start" name="clock"></ion-icon>
-          <ion-label position="stacked">End Time</ion-label>
-          <ion-datetime field_clr display-format="HH-mm" picker-format="HH-mm"  formControlName="etime"></ion-datetime>
-                
-        </ion-item>
+            <ion-icon icon-left slot="start" name="business"></ion-icon>
+             <ion-label position="stacked">Duration</ion-label>
+             
+            <ion-select placeholder="Duration" formControlName="duration" (ionChange)="SelectCustom()">
+                  <ion-select-option value="1">30 Mins</ion-select-option>
+                  <ion-select-option value="2">1 HR</ion-select-option>
+                  <ion-select-option value="3">1 HR 30 Mins</ion-select-option>
+                  <ion-select-option value="4">2 HR</ion-select-option>
+                  <ion-select-option value="5">Custom</ion-select-option>
+                       
+          </ion-select>
+    
+            </ion-item>
+            <div *ngIf="!addmatch.controls.duration.valid && is_submit" class="valid">
+                Please select duration
+            </div>
 
-        <div *ngIf="!addmatch.controls.etime.valid && is_submit" class="valid">
-            Please select end time
-        </div>
-       
+         <ion-item no-padding *ngIf="is_custom">
+            <ion-icon icon-left  slot="start" name="clock"></ion-icon>
+            <ion-label position="stacked">Custom Duration</ion-label>
+            <ion-datetime field_clr display-format="HH-mm" picker-format="HH-mm" formControlName="etime" ></ion-datetime>
   
-            <!-- ////////// -->
+        </ion-item>
+  
+  
+        <div *ngIf="!addmatch.controls.etime.valid && is_submit && is_custom" class="valid">
+            Please select duration
+        </div>
 
-            <ion-item no-padding>
-              <ion-icon icon-left slot="start" name="business"></ion-icon>
-               <ion-label position="stacked">Match Name</ion-label>
-                 <ion-input  formControlName="name"></ion-input>         
-              </ion-item>
-              <div *ngIf="!addmatch.controls.name.valid && is_submit" class="valid">
-                  Please enter name
-              </div>
+
            <ion-row>
            <ion-col size="5">
               <ion-button  shape="round" expand="full" (click)="presentModal2(btn1, 1)" *ngIf="errors.indexOf(btn1)>=0">Select Team1</ion-button>
               <ion-button  shape="round" expand="full" (click)="presentModal2(btn1, 1)" *ngIf="errors.indexOf(btn1)==-1">{{btn1}}</ion-button>
            </ion-col>
 		     <ion-col size="2">
-              <h3 class="vstext" style="  ">VS</h3>
-              </ion-col>
+              <h3 class="vstext">VS</h3>
+        </ion-col>
 			    <ion-col size="5">
               <ion-button  shape="round" expand="full" (click)="presentModal2(btn2, 2)" *ngIf="errors.indexOf(btn2)>=0">Select Team2</ion-button>
               <ion-button  shape="round" expand="full" (click)="presentModal2(btn2, 2)" *ngIf="errors.indexOf(btn2)==-1">{{btn2}}</ion-button>

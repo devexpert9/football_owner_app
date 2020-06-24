@@ -88,7 +88,7 @@ err => {
 
    }
 
-   actionOnFieldReq(rId, a, i, p_id, player_id, date, etime, stime, fullday, players_ids, team_id){
+   actionOnFieldReq(rId, a, i, p_id, player_id, date, etime, stime, fullday, players_ids, team_id, duration){
 
        if(a==0){
            this.apiservice.post('actionOnFieldReq',{rId:rId, status:a,payment_id:p_id, owner_id:this._id,player_id:player_id,fullday:fullday},'').subscribe((result) => {  
@@ -118,7 +118,7 @@ err => {
 
        }else if(a==1){
     
-        this.router.navigate(['request-match',{players_ids : JSON.stringify(players_ids),date:date,stime:stime,etime:etime,fullday:fullday,r_id:rId, player_id:player_id, team_id:team_id}]);
+        this.router.navigate(['request-match',{players_ids : JSON.stringify(players_ids),date:date,stime:stime,etime:etime,fullday:fullday,r_id:rId, player_id:player_id, team_id:team_id, duration:duration}]);
 
 
        }

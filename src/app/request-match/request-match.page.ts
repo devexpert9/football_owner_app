@@ -48,13 +48,14 @@ export class RequestMatchPage implements OnInit {
   team2_name:any='Team 2';
   team_1_type:any=0;
   team_2_type:any=0;
-  fullday:any;
   request_id:any;
   player_ids: any;
   team_id: any;
   team_info : any;
   r_id:any;
   player_id:any;
+  duration:any;
+  duration_minutes:any;
   constructor(public modalController: ModalController,
     public formBuilder: FormBuilder,	
     private filePath: FilePath,
@@ -76,36 +77,18 @@ export class RequestMatchPage implements OnInit {
     ) {
 
       this.ActivatedRoute.params.subscribe(params => {
+
+        console.log(params);
       
               this.team_id = params['team_id']; 
               this.date = params['date']; 
-              this.stime = params['stime']; 
-              this.etime = params['etime']; 
-              this.fullday = params['fullday'];
+              this.duration = params['duration']; 
+              this.stime = params['stime'];    
               this.request_id = params['r_id'];
               this.player_id = params['player_id'];
               this.player_ids = JSON.parse(params['players_ids']);
-              
+              this.etime = params['etime'];
               this.makeform();
-              console.log('aaaaa');
-              console.log(params['player_ids']);
-         
-               if(this.fullday=='true'){
-                    this.addmatch.patchValue({
-                    date:this.date,
-                    etime:'23:59',
-                    stime:'01:00'
-                });
-    
-          }else if(this.fullday=='false'){
-          this.addmatch.patchValue({
-        date:this.date,
-        etime:this.etime,
-        stime:this.stime
-        });
-    
-          }
-    
         });
 
        
@@ -131,13 +114,14 @@ export class RequestMatchPage implements OnInit {
 
   makeform(){
     this.addmatch= this.formBuilder.group({
-         name:['',Validators.compose([Validators.required])],
-         location:['',Validators.compose([Validators.required])],
+       
+         
          date:[this.date, Validators.compose([Validators.required])],
          stime:[this.stime, Validators.compose([Validators.required])],
-         etime:[this.stime, Validators.compose([Validators.required])],
+       
          type:['5',Validators.compose([Validators.required])],
-         gender:[null,Validators.compose([Validators.required])]
+         gender:[null,Validators.compose([Validators.required])],
+         duration:[this.duration,Validators.compose([Validators.required])],
        
     });
   }
@@ -223,22 +207,55 @@ takePicture(sourceType: PictureSourceType) {
 
   }
 
-   uploadmatch(){ 
+   uploadmatch(){
+
+
+
+   if(this.duration=='5'){
+        var startTime = this.etime;
+        var sHour = startTime.split(':')[0]
+        
+        var sMin  = startTime.split(':')[1]
+        
+       this.duration_minutes = (sHour*60) + sMin
+        
+
+      }else{
+        if(this.duration=='1'){
+          this.duration_minutes = 30;
+      }
+
+
+    if(this.duration=='2'){
+         this.duration_minutes = 60;
+    }
+
+    if(this.duration=='3'){
+         this.duration_minutes = 90;
+    }
+
+    if(this.duration=='4'){
+        this.duration_minutes = 120;
+    }
+      }
+
+
+
+
 
     // this.notifi.presentLoading(); 
     this.notifi.presentLoading();
     var reqData= {
       _id:  this._id,
-      name: this.addmatch.value.name,
-      location: this.addmatch.value.location,
+      name: this.team_info.name+ ' VS '+ this.team2_name,
       date:  this.addmatch.value.date,
       stime: this.stime,
       etime: this.etime,
       players: Number(this.addmatch.value.type)*2,
-      team1_name:  this.errors.indexOf(this.team1_name)==-1 ? this.team1_name : 'Team 1',
+      team1_name:  this.errors.indexOf(this.team_info.name)==-1 ? this.team_info.name : 'Team 1',
       team2_name:  this.errors.indexOf(this.team2_name)==-1 ? this.team2_name : 'Team 2',
       request_match: '1',
-      fullday: this.fullday ==true ? '1' :'0',
+      fullday: '0',
       team1_player_ids: this.player_ids.length!=0 ? this.player_ids : [],
       team2_player_ids: this.team2_player_ids.length!=0 ? this.team2_player_ids : [],
       team1_team_id: this.team1_team_id,
@@ -247,7 +264,8 @@ takePicture(sourceType: PictureSourceType) {
       team_1_type: this.team_1_type,
       gender: this.addmatch.value.gender,
       r_id: this.request_id,
-      player_id : this.player_id
+      player_id : this.player_id,
+      duration: this.duration_minutes
 
     }
    

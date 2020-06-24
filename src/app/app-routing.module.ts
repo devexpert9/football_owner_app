@@ -125,6 +125,14 @@ const routes: Routes = [
     path: 'request-match',
     loadChildren: () => import('./request-match/request-match.module').then( m => m.RequestMatchPageModule)
   },
+  {
+   path: 'messages/:id/:type',
+    loadChildren: () => import('./messages/messages.module').then( m => m.MessagesPageModule)
+  },
+  {
+    path: 'allchats',
+    loadChildren: () => import('./allchats/allchats.module').then( m => m.AllchatsPageModule)
+  },
   // {
   //   path: 'select-team',
   //   loadChildren: () => import('./select-team/select-team.module').then( m => m.SelectTeamPageModule)

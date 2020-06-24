@@ -55,6 +55,8 @@ export class AddMatchPage implements OnInit {
   end_hours:any;
   mins_array:any;
   end_mins:any;
+  is_custom:any=false;
+  duration : any;
   constructor(public modalController: ModalController,
     public formBuilder: FormBuilder,	
     private filePath: FilePath,
@@ -81,6 +83,7 @@ export class AddMatchPage implements OnInit {
   ngOnInit() {
   }
   ionViewDidEnter(){
+   this.is_custom=false;
    this.btn1 = 'Team 1';
    this.btn2 = 'Team 2';
    this.team1_player_ids = [];
@@ -98,7 +101,6 @@ export class AddMatchPage implements OnInit {
    this.mins_array=0;
    this.end_mins=0;
     
-    
     this.stripe_id = false;
     this.alldata= JSON.parse(localStorage.getItem('user'));    
      
@@ -111,11 +113,11 @@ export class AddMatchPage implements OnInit {
 
   makeform(){
     this.addmatch= this.formBuilder.group({
-         name:['',Validators.compose([Validators.required])],
-         location:['',Validators.compose([Validators.required])],
+        
          date:['',Validators.compose([Validators.required])],
          stime:['',Validators.compose([Validators.required])],
          etime:['',Validators.compose([Validators.required])],
+         duration:['',Validators.compose([Validators.required])],
          type:['5',Validators.compose([Validators.required])],
          gender:[null,Validators.compose([Validators.required])]
        
@@ -254,44 +256,47 @@ if(this.addmatch.value.date.split('T')[0]==dateStr){
    
 }
 
-// checktime(){
-
-
-//     this.addmatch.controls['etime'].setValue(null)
-
-//     var hours_n =  new Date(this.addmatch.value.stime);
-//     let ehour:any = hours_n.getHours();
-//     let emins:any = hours_n.getMinutes();
-//     var i= ehour;
-//     var cars = 24
-//     var hours_array =[];
-//    for (i = ehour; i <= cars; i++) {
-//      console.log(i)
-//      hours_array.push(ehour++)
-     
-//    }
-//    this.end_hours = hours_array
-
-//    var p = emins;
-//    var carss = 59
-//    var mins_array =[];
-//   for (p = ehour; p <= carss; p++) {
-//     console.log(p)
-//     mins_array.push(emins++)
-    
-//   }
-//   this.end_mins = mins_array
-
-//    ///
-
-//  }
+ 
 
   addmatchnow(){
     
     var sdate = new Date(this.addmatch.value.stime);
-    var edate = new Date(this.addmatch.value.etime);
+    var edate = sdate;
+  
     let shour:any = sdate.getHours();
     let smin:any = sdate.getMinutes();
+
+
+      if(this.addmatch.value.duration=='5'){
+      var edate = new Date(this.addmatch.value.etime);
+      let ehour:any = edate.getHours();
+      let emin:any = edate.getMinutes();
+
+      this.duration = (ehour * 60) + emin
+    
+      }else{
+        if(this.addmatch.value.duration==1){
+      edate.setMinutes(smin + 30 );
+      this.duration =  30;
+    }
+
+
+    if(this.addmatch.value.duration==2){
+      edate.setMinutes(smin + 60 );
+       this.duration =  60;
+    }
+
+    if(this.addmatch.value.duration==3){
+      edate.setMinutes(smin + 90 );
+       this.duration =  90;
+    }
+
+    if(this.addmatch.value.duration==4){
+      edate.setMinutes(smin + 120 );
+       this.duration =  120;
+    }
+      }
+
     let ehour:any = edate.getHours();
     let emin:any = edate.getMinutes();
 
@@ -315,42 +320,39 @@ if(this.addmatch.value.date.split('T')[0]==dateStr){
     this.etime= ehour+':'+emin;
 
  
-   this.is_submit=true;  
-
    if(this.addmatch.valid){
     this.uploadmatch();        
     }
 
   }
 
-  
-
    uploadmatch(){ 
 
     this.notifi.presentLoading(); 
-
+    var t1 = this.errors.indexOf(this.team1_name)==-1 ? this.team1_name : 'Team 1';
+    var t2 = this.errors.indexOf(this.team2_name)==-1 ? this.team2_name : 'Team 2';
     var reqData= {
       _id:  this._id,
-      name: this.addmatch.value.name,
-      location: this.addmatch.value.location,
+      name: t1 + ' VS ' + t2,
       date:  this.addmatch.value.date.split('T')[0],
       stime: this.stime,
       etime: this.etime,
       players: Number(this.addmatch.value.type)*2,
-      team1_name:  this.errors.indexOf(this.team1_name)==-1 ? this.team1_name : 'Team 1',
-      team2_name:  this.errors.indexOf(this.team2_name)==-1 ? this.team2_name : 'Team 2',
+      team1_name: t1 ,
+      team2_name: t2 ,
       request_match: '0',
       fullday: '0',
-      team1_player_ids: this.team1_player_ids.length!=0 ? this.team1_player_ids : [],
-      team2_player_ids: this.team2_player_ids.length!=0 ? this.team2_player_ids : [],
+      team1_player_ids: this.team1_player_ids.length!=0 ? JSON.stringify(this.team1_player_ids) : JSON.stringify([]),
+      team2_player_ids: this.team2_player_ids.length!=0 ? JSON.stringify(this.team2_player_ids) : JSON.stringify([]),
       team1_team_id: this.team1_team_id,
       team2_team_id: this.team2_team_id,
       team_2_type: this.team_2_type,
       team_1_type: this.team_1_type,
       gender: this.addmatch.value.gender,
+      duration: this.duration
 
     }
-
+ 
      this.apiservice.post('addmatch',reqData,'').subscribe((result) => {  
     this.notifi.stopLoading();              
     this.response=result;
@@ -523,6 +525,21 @@ if(this.addmatch.value.date.split('T')[0]==dateStr){
     });
 
     await alert.present();
+  }
+
+
+  SelectCustom(){
+      
+      if(this.addmatch.value.duration=='5'){
+        this.is_custom = true;
+        this.addmatch.controls['etime'].setValue(null);
+
+      }else{
+        this.is_custom = false;
+        var date = new Date();
+       this.addmatch.controls['etime'].setValue(date);
+      }
+      
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, ViewChild } from '@angular/core';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File, FileEntry } from '@ionic-native/file/ngx';
 import { Camera, CameraOptions, PictureSourceType } from '@ionic-native/camera/ngx';
@@ -11,7 +11,10 @@ import {config} from '../config'
 import { Events, ActionSheetController, Platform } from '@ionic/angular';
 import { DomSanitizer } from '@angular/platform-browser';
 import { stringify } from 'querystring';
-
+import { IonContent } from '@ionic/angular';
+declare var window: any; 
+import { ModalController } from '@ionic/angular';
+ 
 declare var window: any; 
 @Component({
   selector: 'app-my-profile',
@@ -19,6 +22,8 @@ declare var window: any;
   styleUrls: ['./my-profile.page.scss'],
 })
 export class MyProfilePage implements OnInit {
+   @ViewChild(IonContent, { static: false }) content: IonContent;
+
   public win: any = window; 
   response:any;
   profileData: any;
@@ -66,7 +71,26 @@ export class MyProfilePage implements OnInit {
   img_selected:any=false; 
   name:any;
   address:any;
+
+  addmatch1:FormGroup;
+  is_submit1:any;
+  response1:any;
+  imgpath1:any;
+  covererr1:any=false;
+  propertyres1:any;
+  propertdetails1:any;
+  picpath1:any;
+  url1:any=config.API_URL+'server/data/property/';
+  lat1:any;
+  lng1:any;
+  address1:any='chandigarh';
+  userSettings1 = {};
+  address_error1:boolean=false;
+  response_came1:boolean=false;
+  skeleton:any;
+
   constructor(	   
+    public modalController: ModalController,
     public formBuilder: FormBuilder,	
     private filePath: FilePath,
     private transfer: FileTransfer,
@@ -80,8 +104,14 @@ export class MyProfilePage implements OnInit {
     private platform: Platform,
     public apiservice:ApiService,
     public notifi:NotiService,
-    public sanitizer:DomSanitizer  
-       )  {    
+    public sanitizer:DomSanitizer,  
+       )  {
+            this.skeleton=[1,2,3,4,5,6,7,8,9,1,2,2,3,4,5,6,7,65,4,2,3,4,5,6,7,8]; 
+            this.events.subscribe('refresh', data => {
+              this.ionViewDidEnter();
+          
+            })  
+
            this.makepasswordform();    
            this._id= localStorage.getItem('_id');
            if(this.errors.indexOf(this.alldata.pic)){
@@ -101,7 +131,9 @@ export class MyProfilePage implements OnInit {
 
   ionViewDidEnter(){
 
-
+      this._id = localStorage.getItem('_id');
+      this.response_came1=false;
+      this.getProperty(); 
       this.alldata='';
       this.alldata=JSON.parse(localStorage.getItem('user'));
       this.name='';
@@ -117,9 +149,183 @@ export class MyProfilePage implements OnInit {
          state:this.alldata.state,
          country:this.alldata.country,
          zip:this.alldata.zip
-      });
+      }); 
 
   }
+
+  /////////
+ 
+  async selectImage1() {
+   
+    const actionSheet = await this.actionSheetController.create({
+    header: "Select Image source",
+    mode:"ios",
+    buttons: [{
+          text: 'Load from Library',
+          handler: () => {
+         
+              this.takePicture1(this.camera.PictureSourceType.PHOTOLIBRARY);
+          }
+      },
+      {
+          text: 'Use Camera',
+          handler: () => {
+            
+              this.takePicture1(this.camera.PictureSourceType.CAMERA);
+             
+          }
+      },
+      {
+          text: 'Cancel',
+          role: 'cancel'
+      }
+    ]
+  });
+  await actionSheet.present();
+}
+
+takePicture1(sourceType: PictureSourceType) {
+  this.covererr1=false;
+  var options: CameraOptions = {
+      quality: 50,
+      sourceType: sourceType,
+      saveToPhotoAlbum: false,
+      correctOrientation: true
+  };
+  this.camera.getPicture(options).then(imagePath => {
+    this.imgpath1='';
+    if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
+        this.filePath.resolveNativePath(imagePath)
+            .then(filePath => { 
+
+           
+              this.imgpath1 = imagePath;
+
+            });
+    } else {
+      // this.startUpload(imagePath);
+    
+      this.imgpath1 = imagePath;
+     
+    }
+  });
+} 
+
+
+  addmatchnow(){ 
+   this.is_submit1=true;
+   if(this.errors.indexOf(this.imgpath1)==-1 && this.addmatch1.valid){
+    this.file.resolveLocalFilesystemUrl(this.imgpath1)
+    .then(entry => {
+        ( < FileEntry > entry).file(file => {
+          console.log('read file');
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            console.log('onloadend');
+            const imgBlob = new Blob([reader.result], {
+              type: file.type
+          });
+          this.uploadmatch(imgBlob,file.name);           
+        }
+        reader.readAsArrayBuffer(file);
+
+        })
+    })
+    .catch(err => {
+        this.notifi.presentToast('Error while reading file.','danger');
+    });     
+  }else{
+    this.covererr1=true;
+
+  } 
+
+  }
+
+   uploadmatch(img,file){
+     if(this.errors.indexOf(this.address1)==-1){
+          this.address_error1=false;
+          this.notifi.presentLoading(); 
+          const formData = new FormData();
+          formData.append('file', img, file); 
+          formData.append('_id', this._id);
+          formData.append('name', this.addmatch1.value.name);
+          formData.append('area', this.addmatch1.value.area);
+          formData.append('state', this.addmatch1.value.state);
+          formData.append('city', this.addmatch1.value.city);
+          formData.append('zip', this.addmatch1.value.zip);
+          formData.append('address', this.address1);
+          formData.append('descr', this.addmatch1.value.descr);
+          formData.append('lat','30.7333');
+          formData.append('lng', '76.7794');
+  
+          this.apiservice.post('updatePropertyByOwner',formData,'').subscribe((result) => {  
+              this.notifi.stopLoading();              
+              this.response1=result;
+          if(this.response1.status == 1){
+            this.notifi.presentToast(this.response1.msg,'success');  
+            this.is_submit1=false;   
+         }else{
+                        this.notifi.presentToast(this.response1.msg,'danger');  
+                      }
+        },
+        err => {
+              this.notifi.stopLoading();
+              this.notifi.presentToast('Internal server error. Try again','danger');
+        });
+
+
+     }else{
+       this.address_error1=true;
+     }
+
+   
+  }
+
+  getProperty(){   
+    this.apiservice.post('getProperty',{_id:this._id},'').subscribe((result) => {  
+          this.response_came1=true;
+          this.notifi.stopLoading();              
+          this.propertyres1=result;
+  if(this.propertyres1.status == 1){ 
+          this.covererr1= false;  
+          this.address1= this.propertyres1.data.address;  
+          this.userSettings1['inputString'] = this.propertyres1.data.address ;
+          this.userSettings1 = Object.assign({},this.userSettings1);
+      // this.notifi.presentToast(this.response.msg,'success'); 
+      this.propertdetails1=this.propertyres1.data;
+      this.addmatch1.patchValue({
+          name:this.propertdetails1.name,
+          area:this.propertdetails1.area,
+          state:this.propertdetails1.state,
+          city:this.propertdetails1.city,
+          zip:this.propertdetails1.zip,
+          address:this.propertdetails1.address,
+          descr:this.propertdetails1.descr      
+      });
+          this.picpath1= this.propertdetails1.cover;
+          console.log(this.propertdetails1);     
+     
+  }
+
+},
+err => {
+          this.response_came1=true;
+          this.notifi.stopLoading();
+          this.notifi.presentToast('Internal server error. Try again','danger');
+});
+
+   }
+
+   autoCompleteCallback1(selectedData:any) {
+          console.log(selectedData.data);
+          this.lat1= selectedData.data.geometry.location.lat;
+          this.lng1= selectedData.data.geometry.location.lng;
+          this.address1= selectedData.data.description;
+ 
+}
+
+
+  /////////
    
   makeform(){
     this.updatedata= this.formBuilder.group({
@@ -132,6 +338,16 @@ export class MyProfilePage implements OnInit {
          country:['',Validators.compose([Validators.required])],
          zip:['',Validators.compose([Validators.required])]
     });
+
+    this.addmatch1= this.formBuilder.group({
+        name:['',Validators.compose([Validators.required])],
+        area:['',Validators.compose([Validators.required])],
+        state:['',Validators.compose([Validators.required])],
+        city:['',Validators.compose([Validators.required])],
+        zip:['',Validators.compose([Validators.required])],
+        descr:['',Validators.compose([Validators.required])]             
+ });
+
   }
 
   makepasswordform(){
@@ -310,6 +526,10 @@ err => {
  }
 
 
+}
+
+goToProperty(){
+  
 }
 
 }

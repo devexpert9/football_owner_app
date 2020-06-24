@@ -17,7 +17,7 @@ declare var window: any;
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-    title="Home";
+    title="Centre Circle";
     slideOptsOne = {
     initialSlide: 1,
     speed: 400,
@@ -74,11 +74,11 @@ export class HomePage {
   keyword:any;
   noresults:any=false;
 
-  noToday:any=false;
-  noUpcoming:any=false;
+  noToday:any;
+  noUpcoming:any;
     skeleton:any=[];
-  response1_came:any=false;
-  response2_came:any=false;
+  response1_came:any;
+  response2_came:any;
   constructor(	   
      private filePath: FilePath,
     private transfer: FileTransfer,
@@ -104,13 +104,15 @@ export class HomePage {
     }
           
        ionViewDidEnter(){
-        this._id =localStorage.getItem('_id');
-            this.response2_came=false; 
-            this.response1_came=false;          
-            this.upcominglist=[];
-            this.matchlist=[];
-            this.todayMatches(); 
-            this.upcomingMatches(); 
+          this.noToday='';
+          this.noUpcoming='';
+          this._id =localStorage.getItem('_id');
+          this.response2_came=''; 
+          this.response1_came='';          
+          this.upcominglist=[];
+          this.matchlist=[];
+          this.todayMatches(); 
+          this.upcomingMatches(); 
           }
 
   ngOnInit() {
@@ -131,8 +133,7 @@ export class HomePage {
    
       this.matchlist=res.data;
       
-     
-  }
+     }
   else{
      
     this.noToday=true;
